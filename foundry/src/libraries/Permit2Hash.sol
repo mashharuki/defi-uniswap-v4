@@ -3,7 +3,7 @@ pragma solidity 0.8.30;
 
 import {IPermit2} from "../interfaces/IPermit2.sol";
 
-// Copied from
+// 以下からコピー
 // https://github.com/Uniswap/permit2/blob/cc56ad0f3439c502c246fc5cfcc3db92bb8b7219/src/libraries/PermitHash.sol
 
 library Permit2Hash {

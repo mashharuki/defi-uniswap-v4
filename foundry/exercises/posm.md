@@ -1,12 +1,12 @@
-# Position Manager Exercises
+# ポジションマネージャー演習
 
-In this exercise, you'll learn how to use the [`PositionManager`](https://github.com/Uniswap/v4-periphery/blob/main/src/PositionManager.sol) contract.
+この演習では、[`PositionManager`](https://github.com/Uniswap/v4-periphery/blob/main/src/PositionManager.sol)コントラクトの使い方を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/Posm.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Posm.sol)
+この演習のスターターコードは [`foundry/src/exercises/Posm.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Posm.sol) にあります
 
-Solution is in [`foundry/src/solutions/Posm.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Posm.sol)
+ソリューションは [`foundry/src/solutions/Posm.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Posm.sol) にあります
 
-## Task 1 - Increase liquidity
+## タスク1 - 流動性を追加
 
 ```solidity
 function increaseLiquidity(
@@ -15,13 +15,13 @@ function increaseLiquidity(
     uint128 amount0Max,
     uint128 amount1Max
 ) external payable {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Complete the function to increase liquidity for the position identified by `tokenId`.
+`tokenId`で識別されるポジションの流動性を追加する関数を完成させてください。
 
-## Task 2 - Decrease liquidity
+## タスク2 - 流動性を削減
 
 ```solidity
 function decreaseLiquidity(
@@ -30,25 +30,25 @@ function decreaseLiquidity(
     uint128 amount0Min,
     uint128 amount1Min
 ) external {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Complete the function to decrease liquidity for the position identified by `tokenId`.
+`tokenId`で識別されるポジションの流動性を削減する関数を完成させてください。
 
-## Task 3 - Burn
+## タスク3 - バーン
 
 ```solidity
 function burn(uint256 tokenId, uint128 amount0Min, uint128 amount1Min)
     external
 {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Complete the function to burn the position identified by `tokenId`.
+`tokenId`で識別されるポジションをバーンする関数を完成させてください。
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/Posm.test.sol -vvv

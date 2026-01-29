@@ -51,12 +51,12 @@ contract Swap is IUnlockCallback {
             key: params.poolKey,
             params: SwapParams({
                 zeroForOne: params.zeroForOne,
-                // amountSpecified < 0 = amount in
-                // amountSpecified > 0 = amount out
+                // amountSpecified < 0 = 入力量
+                // amountSpecified > 0 = 出力量
                 amountSpecified: -(params.amountIn.toInt256()),
-                // price = Currency 1 / currency 0
-                // 0 for 1 = price decreases
-                // 1 for 0 = price increases
+                // 価格 = 通貨1 / 通貨0
+                // 0 for 1 = 価格が下がる
+                // 1 for 0 = 価格が上がる
                 sqrtPriceLimitX96: params.zeroForOne
                     ? MIN_SQRT_PRICE + 1
                     : MAX_SQRT_PRICE - 1
@@ -115,7 +115,7 @@ contract Swap is IUnlockCallback {
         currencyIn.transferIn(msg.sender, uint256(params.amountIn));
         poolManager.unlock(abi.encode(msg.sender, params));
 
-        // Refund
+        // 返金
         uint256 bal = currencyIn.balanceOf(address(this));
         if (bal > 0) {
             currencyIn.transferOut(msg.sender, bal);

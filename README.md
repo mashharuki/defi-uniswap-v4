@@ -11,124 +11,124 @@
 </p>
 </div>
 
-This repository houses course resources and [discussions](https://github.com/Cyfrin/defi-uniswap-v4/discussions) for the course.
+このリポジトリには、コースのリソースと[ディスカッション](https://github.com/Cyfrin/defi-uniswap-v4/discussions)が含まれています。
 
-Please refer to this for an in-depth explanation of the content:
+詳細な説明については、以下を参照してください：
 
-- [Website](https://updraft.cyfrin.io) - Join Cyfrin Updraft and enjoy 50+ hours of smart contract development courses
-- [Twitter](https://twitter.com/CyfrinUpdraft) - Stay updated with the latest course releases
-- [LinkedIn](https://www.linkedin.com/school/cyfrin-updraft/) - Add Updraft to your learning experiences
-- [Discord](https://discord.gg/cyfrin) - Join a community of 3000+ developers and auditors
-- [Codehawks](https://codehawks.com) - Smart contracts auditing competitions to help secure web3
+- [ウェブサイト](https://updraft.cyfrin.io) - Cyfrin Updraftに参加して、50時間以上のスマートコントラクト開発コースをお楽しみください
+- [Twitter](https://twitter.com/CyfrinUpdraft) - 最新のコースリリース情報をチェック
+- [LinkedIn](https://www.linkedin.com/school/cyfrin-updraft/) - Updraftを学習体験に追加
+- [Discord](https://discord.gg/cyfrin) - 3000人以上の開発者・監査者のコミュニティに参加
+- [Codehawks](https://codehawks.com) - Web3のセキュリティを支えるスマートコントラクト監査コンペティション
 
-# Course intro
+# コース概要
 
-- [Course intro](./notes/course_intro.md)
-- [Setup](./notes/course_setup.md)
+- [コース概要](./notes/course_intro.md)
+- [セットアップ](./notes/course_setup.md)
 
-# Overview
+# 概要
 
-- [V4 vs V3](./notes/v4.md)
-- [Repositories](./notes/repos.png)
+- [V4とV3の比較](./notes/v4.md)
+- [リポジトリ](./notes/repos.png)
 
-# Pool manager
+# Pool Manager（プールマネージャー）
 
-- [Currency](https://github.com/Uniswap/v4-core/blob/main/src/types/Currency.sol)
-- Pool key and pool id
+- [Currency（通貨）](https://github.com/Uniswap/v4-core/blob/main/src/types/Currency.sol)
+- Pool KeyとPool ID
   - [PoolKey](https://github.com/Uniswap/v4-core/blob/main/src/types/PoolKey.sol)
   - [PoolId](https://github.com/Uniswap/v4-core/blob/main/src/types/PoolId.sol)
-  - [Example](./foundry/src/examples/pool_id.sol)
-  - [Dune - How to get PoolKey from PoolId](https://dune.com/queries/5671549?category=decoded_project&namespace=uniswap_v4&blockchain=ethereum&contract=PoolManager&blockchains=ethereum&id=uniswap_v4_ethereum.poolmanager_evt_initialize)
-- Lock
+  - [例](./foundry/src/examples/pool_id.sol)
+  - [Dune - PoolIdからPoolKeyを取得する方法](https://dune.com/queries/5671549?category=decoded_project&namespace=uniswap_v4&blockchain=ethereum&contract=PoolManager&blockchains=ethereum&id=uniswap_v4_ethereum.poolmanager_evt_initialize)
+- Lock（ロック）
   - [`Lock`](https://github.com/Uniswap/v4-core/blob/main/src/libraries/Lock.sol)
   - [`unlock`](https://github.com/Uniswap/v4-core/blob/59d3ecf53afa9264a16bba0e38f4c5d2231f80bc/src/PoolManager.sol#L104-L114)
   - [`NonzeroDeltaCount`](https://github.com/Uniswap/v4-core/blob/main/src/libraries/NonzeroDeltaCount.sol)
-- [Transient storage](./foundry/src/examples/transient_storage.sol)
+- [Transient Storage（一時ストレージ）](./foundry/src/examples/transient_storage.sol)
   - [`NonzeroDeltaCount`](https://github.com/Uniswap/v4-core/blob/main/src/libraries/NonzeroDeltaCount.sol)
   - [`_accountDelta`](https://github.com/Uniswap/v4-core/blob/59d3ecf53afa9264a16bba0e38f4c5d2231f80bc/src/PoolManager.sol#L368-L378)
-  - [Account delta](./notes/account_delta.png)
-- [Currency reserves](https://github.com/Uniswap/v4-core/blob/59d3ecf53afa9264a16bba0e38f4c5d2231f80bc/src/PoolManager.sol#L279-L288)
-- [Swap contract calls](./notes/swap.png)
+  - [アカウントデルタ](./notes/account_delta.png)
+- [通貨リザーブ](https://github.com/Uniswap/v4-core/blob/59d3ecf53afa9264a16bba0e38f4c5d2231f80bc/src/PoolManager.sol#L279-L288)
+- [スワップコントラクト呼び出し](./notes/swap.png)
   - [`BalanceDelta`](https://github.com/Uniswap/v4-core/blob/main/src/types/BalanceDelta.sol)
-  - [Exercise - flash loan](./foundry/exercises/flash.md)
-  - [Exercise - swap](./foundry/exercises/swap.md)
-- Reading data
+  - [演習 - フラッシュローン](./foundry/exercises/flash.md)
+  - [演習 - スワップ](./foundry/exercises/swap.md)
+- データの読み取り
   - [`extsload`](https://github.com/Uniswap/v4-core/blob/main/src/Extsload.sol)
   - [`exttload`](https://github.com/Uniswap/v4-core/blob/main/src/Exttload.sol)
   - [`StateLibrary`](https://github.com/Uniswap/v4-core/blob/main/src/libraries/StateLibrary.sol)
     - [`StateView`](https://github.com/Uniswap/v4-periphery/blob/main/src/lens/StateView.sol)
   - [`TransientStateLibrary`](https://github.com/Uniswap/v4-core/blob/main/src/libraries/TransientStateLibrary.sol)
     - [`DeltaResolver`](https://github.com/Uniswap/v4-periphery/blob/main/src/base/DeltaResolver.sol)
-  - [Exercise - get currency delta](./foundry/exercises/reader.md)
-- [Application - swap router](./foundry/exercises/swap_router.md)
+  - [演習 - 通貨デルタの取得](./foundry/exercises/reader.md)
+- [アプリケーション - スワップルーター](./foundry/exercises/swap_router.md)
 
-# Hooks
+# Hooks（フック）
 
-- Key concepts
-  - External contract calls before and after pool operations such as swap and liquidity modifications
+- 主要概念
+  - スワップや流動性変更などのプール操作の前後に呼び出される外部コントラクト
     - [`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol)
     - [`IHooks`](https://github.com/Uniswap/v4-core/blob/main/src/interfaces/IHooks.sol)
     - [`Hooks`](https://github.com/Uniswap/v4-core/blob/main/src/libraries/Hooks.sol)
-  - [Hooks are part of the derivation for `PoolId`](./notes/hooks.png)
-- How are hook flags encoded into the hooks address?
-  - Bottom 14 bits
-    - [Flags](https://github.com/Uniswap/v4-core/blob/59d3ecf53afa9264a16bba0e38f4c5d2231f80bc/src/libraries/Hooks.sol#L27-L47)
+  - [フックは`PoolId`の導出に含まれる](./notes/hooks.png)
+- フックフラグはどのようにフックアドレスにエンコードされるか？
+  - 下位14ビット
+    - [フラグ](https://github.com/Uniswap/v4-core/blob/59d3ecf53afa9264a16bba0e38f4c5d2231f80bc/src/libraries/Hooks.sol#L27-L47)
     - [`hasPermission`](https://github.com/Uniswap/v4-core/blob/59d3ecf53afa9264a16bba0e38f4c5d2231f80bc/src/libraries/Hooks.sol#L337-L339)
   - [`HookMiner`](https://github.com/Uniswap/v4-periphery/blob/main/src/utils/HookMiner.sol)
     - [`FindHookSalt.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/test/FindHookSalt.test.sol)
-- [Access msg.sender inside a hooks contract](./notes/hooks_msg_sender.png)
-- [Exercise - counter hook](./foundry/exercises/counter.md)
-- [Application - limit order](./foundry/exercises/limit_order.md)
-  - [What is a limit order](https://app.uniswap.org/limit)
-  - [Review ticks and liquidity](https://www.desmos.com/calculator/x31s77joxw)
-  - [Algorithm](./notes/limit_order.png)
+- [フックコントラクト内でmsg.senderにアクセスする](./notes/hooks_msg_sender.png)
+- [演習 - カウンターフック](./foundry/exercises/counter.md)
+- [アプリケーション - 指値注文](./foundry/exercises/limit_order.md)
+  - [指値注文とは](https://app.uniswap.org/limit)
+  - [ティックと流動性の復習](https://www.desmos.com/calculator/x31s77joxw)
+  - [アルゴリズム](./notes/limit_order.png)
 
-# Position Manager
+# Position Manager（ポジションマネージャー）
 
-- Key concepts
+- 主要概念
   - [`PositionManager`](https://github.com/Uniswap/v4-periphery/blob/main/src/PositionManager.sol)
-  - Entry point
+  - エントリーポイント
     - [`modifyLiquidities`](https://github.com/Uniswap/v4-periphery/blob/60cd93803ac2b7fa65fd6cd351fd5fd4cc8c9db5/src/PositionManager.sol#L172-L179)
     - [`BaseActionsRouter`](https://github.com/Uniswap/v4-periphery/blob/main/src/base/BaseActionsRouter.sol)
     - [`Actions`](https://github.com/Uniswap/v4-periphery/blob/main/src/libraries/Actions.sol)
-  - Mint, burn, increase / decrease liquidity and collect fees
+  - ミント、バーン、流動性の追加/削減、手数料の収集
     - [`V4Resolver`](https://github.com/Uniswap/v4-periphery/blob/main/src/base/DeltaResolver.sol)
   - [`permit2`](./notes/permit2.png)
     - [`permit2`](https://github.com/Uniswap/permit2)
     - [`Permit2Forwarder.sol`](https://github.com/Uniswap/v4-periphery/blob/main/src/base/Permit2Forwarder.sol)
     - [`Multicall_v4`](https://github.com/Uniswap/v4-periphery/blob/main/src/base/Multicall_v4.sol)
-- [Exercise - position manager](./foundry/exercises/posm.md)
-  - [Subscriber](./notes/subscribe.png)
+- [演習 - ポジションマネージャー](./foundry/exercises/posm.md)
+  - [サブスクライバー](./notes/subscribe.png)
     - [`Notifier`](https://github.com/Uniswap/v4-periphery/blob/main/src/base/Notifier.sol)
-- [Exercise - subscriber](./foundry/exercises/subscriber.md)
-- [Application - reposition liquidity](./foundry/exercises/reposition.md)
+- [演習 - サブスクライバー](./foundry/exercises/subscriber.md)
+- [アプリケーション - 流動性のリポジション](./foundry/exercises/reposition.md)
 
-# Universal Router
+# Universal Router（ユニバーサルルーター）
 
 - [`UniversalRouter`](https://docs.uniswap.org/contracts/universal-router/overview)
-- How it works
+- 仕組み
   - [`execute`](https://github.com/Uniswap/universal-router/blob/3663f6db6e2fe121753cd2d899699c2dc75dca86/contracts/UniversalRouter.sol#L44-L62)
   - [`dispatch`](https://github.com/Uniswap/universal-router/blob/3663f6db6e2fe121753cd2d899699c2dc75dca86/contracts/base/Dispatcher.sol#L47-L286)
   - [`Commands`](https://github.com/Uniswap/universal-router/blob/main/contracts/libraries/Commands.sol)
-    - [Examples - `Permit2` and non-reverting command](./foundry/test/UniversalRouterPermit2.test.sol)
-  - [Commands and inputs](https://docs.uniswap.org/contracts/universal-router/technical-reference)
+    - [例 - `Permit2`とリバートしないコマンド](./foundry/test/UniversalRouterPermit2.test.sol)
+  - [コマンドと入力](https://docs.uniswap.org/contracts/universal-router/technical-reference)
   - [`V4SwapRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/modules/uniswap/v4/V4SwapRouter.sol)
   - [`IV4Router`](https://github.com/Uniswap/v4-periphery/blob/main/src/interfaces/IV4Router.sol)
-- UniversalRouter and Permit2
+- UniversalRouterとPermit2
   - [`V4SwapRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/modules/uniswap/v4/V4SwapRouter.sol)
   - [`DeltaResolver`](https://github.com/Uniswap/v4-periphery/blob/main/src/base/DeltaResolver.sol)
   - [`payOrPermit2Transfer`](https://github.com/Uniswap/universal-router/blob/3663f6db6e2fe121753cd2d899699c2dc75dca86/contracts/modules/Permit2Payments.sol#L42-L45)
-- [Exercise - execute UniversalRouter commands](./foundry/exercises/universal_router.md)
-- [V3 to V4 Multi hop swap](./notes/uni_router_v3_v4_swap.png)
-- [Exercise - Multi hop swap on V3 and then V4](./foundry/exercises/swap_v3_v4.md)
-- [Exercise - Quoter](./foundry/exercises/quoter.md)
-- [Application - liquidation](./foundry/exercises/liquidation.md)
+- [演習 - UniversalRouterコマンドの実行](./foundry/exercises/universal_router.md)
+- [V3からV4へのマルチホップスワップ](./notes/uni_router_v3_v4_swap.png)
+- [演習 - V3とV4でのマルチホップスワップ](./foundry/exercises/swap_v3_v4.md)
+- [演習 - クォーター](./foundry/exercises/quoter.md)
+- [アプリケーション - 清算](./foundry/exercises/liquidation.md)
 
-# Resources
+# リソース
 
 - [Uniswap V4](https://v4.uniswap.org/)
-- [Uniswap V4 pools](https://app.uniswap.org/explore/pools)
-- [Uniswap V4 docs](https://docs.uniswap.org/contracts/v4/overview)
+- [Uniswap V4プール](https://app.uniswap.org/explore/pools)
+- [Uniswap V4ドキュメント](https://docs.uniswap.org/contracts/v4/overview)
 - [GitHub - v4-core](https://github.com/Uniswap/v4-core)
 - [GitHub - v4-periphery](https://github.com/Uniswap/v4-periphery)
 - [GitHub - universal-router](https://github.com/Uniswap/universal-router)
@@ -136,13 +136,13 @@ Please refer to this for an in-depth explanation of the content:
 - [GitHub - permit2](https://github.com/Uniswap/permit2)
 - [GitHub - mixed-quoter](https://github.com/Uniswap/mixed-quoter)
 - [YouTube - Uniswap v4 on Unichain](https://www.youtube.com/watch?v=ZisqLqbakfM)
-- [Cyfrin - Uniswap V4 Swap: Deep Dive Into Execution and Accounting](https://www.cyfrin.io/blog/uniswap-v4-swap-deep-dive-into-execution-and-accounting)
-- [PoolManager - storage layout](https://www.evm.codes/contract?address=0x000000000004444c5dc75cb358380d2e3de08a90)
-- [Dune - How to get PoolKey from PoolId](https://dune.com/queries/5671549?category=decoded_project&namespace=uniswap_v4&blockchain=ethereum&contract=PoolManager&blockchains=ethereum&id=uniswap_v4_ethereum.poolmanager_evt_initialize)
+- [Cyfrin - Uniswap V4スワップ：実行とアカウンティングの詳細解説](https://www.cyfrin.io/blog/uniswap-v4-swap-deep-dive-into-execution-and-accounting)
+- [PoolManager - ストレージレイアウト](https://www.evm.codes/contract?address=0x000000000004444c5dc75cb358380d2e3de08a90)
+- [Dune - PoolIdからPoolKeyを取得する方法](https://dune.com/queries/5671549?category=decoded_project&namespace=uniswap_v4&blockchain=ethereum&contract=PoolManager&blockchains=ethereum&id=uniswap_v4_ethereum.poolmanager_evt_initialize)
 - [Uniswap v4 by Example](https://www.v4-by-example.org/)
 - [Bunni](https://bunni.xyz/)
-- [Damian Rusinek - Secrets of Uniswap V4: A Deep Dive into Hooks Security](https://www.youtube.com/watch?v=VhEbnGSUdYY)
+- [Damian Rusinek - Uniswap V4の秘密：フックセキュリティの詳細解説](https://www.youtube.com/watch?v=VhEbnGSUdYY)
 - [`BaseHook`](https://github.com/Uniswap/v4-periphery/blob/main/src/utils/BaseHook.sol)
 - [`LimitOrder`](https://github.com/Uniswap/v4-periphery/blob/example-contracts/contracts/hooks/examples/LimitOrder.sol)
 - [Permit2](https://github.com/dragonfly-xyz/useful-solidity-patterns/tree/main/patterns/permit2)
-- [How to swap from V3 to V4 using `UniversalRouter`](https://x.com/saucepoint/status/1950588162578817460)
+- [UniversalRouterを使用したV3からV4へのスワップ方法](https://x.com/saucepoint/status/1950588162578817460)

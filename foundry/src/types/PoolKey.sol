@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-/// @notice Returns the key for identifying a pool
+/// @notice プールを識別するためのキーを返す
 struct PoolKey {
-    /// @notice The lower currency of the pool, sorted numerically
+    /// @notice プールの小さい方の通貨、数値順にソート
     address currency0;
-    /// @notice The higher currency of the pool, sorted numerically
+    /// @notice プールの大きい方の通貨、数値順にソート
     address currency1;
-    /// @notice The pool LP fee, capped at 1_000_000. If the highest bit is 1, the pool has a dynamic fee and must be exactly equal to 0x800000
+    /// @notice プールのLP手数料、最大1_000_000。最上位ビットが1の場合、プールは動的手数料を持ち、0x800000と正確に等しくなければならない
     uint24 fee;
-    /// @notice Ticks that involve positions must be a multiple of tick spacing
+    /// @notice ポジションに関係するtickはtick spacingの倍数でなければならない
     int24 tickSpacing;
-    /// @notice The hooks of the pool
+    /// @notice プールのhook
     address hooks;
 }

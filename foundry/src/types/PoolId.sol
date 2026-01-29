@@ -5,16 +5,16 @@ import {PoolKey} from "./PoolKey.sol";
 
 type PoolId is bytes32;
 
-/// @notice Library for computing the ID of a pool
+/// @notice プールのIDを計算するためのライブラリ
 library PoolIdLibrary {
-    /// @notice Returns value equal to keccak256(abi.encode(poolKey))
+    /// @notice keccak256(abi.encode(poolKey))と等しい値を返す
     function toId(PoolKey memory poolKey)
         internal
         pure
         returns (PoolId poolId)
     {
         assembly ("memory-safe") {
-            // 0xa0 represents the total size of the poolKey struct (5 slots of 32 bytes)
+            // 0xa0はpoolKey構造体の総サイズを表す（32バイトのスロット5つ分）
             poolId := keccak256(poolKey, 0xa0)
         }
     }

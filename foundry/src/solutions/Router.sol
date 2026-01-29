@@ -20,7 +20,7 @@ contract Router is TStore, IUnlockCallback {
     using SafeCast for uint128;
     using CurrencyLib for address;
 
-    // Actions
+    // アクション
     uint256 private constant SWAP_EXACT_IN_SINGLE = 0x06;
     uint256 private constant SWAP_EXACT_IN = 0x07;
     uint256 private constant SWAP_EXACT_OUT_SINGLE = 0x08;
@@ -54,8 +54,8 @@ contract Router is TStore, IUnlockCallback {
 
     struct ExactInputParams {
         address currencyIn;
-        // First element + currencyIn determines the first pool to swap
-        // Last element + previous path element's currency determines the last pool to swap
+        // 最初の要素 + currencyInで最初のスワップするプールを決定
+        // 最後の要素 + 前のパス要素の通貨で最後のスワップするプールを決定
         PathKey[] path;
         uint128 amountIn;
         uint128 amountOutMin;
@@ -63,8 +63,8 @@ contract Router is TStore, IUnlockCallback {
 
     struct ExactOutputParams {
         address currencyOut;
-        // Last element + currencyOut determines the last pool to swap
-        // First element + second path element's currency determines the first pool to swap
+        // 最後の要素 + currencyOutで最後のスワップするプールを決定
+        // 最初の要素 + 2番目のパス要素の通貨で最初のスワップするプールを決定
         PathKey[] path;
         uint128 amountOut;
         uint128 amountInMax;
@@ -199,11 +199,11 @@ contract Router is TStore, IUnlockCallback {
                 (int128 amount0, int128 amount1) =
                     _swap(key, zeroForOne, -amountIn, path.hookData);
 
-                // Next params
+                // 次のパラメータ
                 currencyIn = path.currency;
                 amountIn = (zeroForOne ? amount1 : amount0).toInt256();
             }
-            // currencyIn and amountIn stores currency out and amount out
+            // currencyInとamountInには出力通貨と出力量が格納されている
             require(
                 uint256(amountIn) >= uint256(params.amountOutMin),
                 "amount out < min"
@@ -245,12 +245,12 @@ contract Router is TStore, IUnlockCallback {
                 (int128 amount0, int128 amount1) =
                     _swap(key, zeroForOne, amountOut, path.hookData);
 
-                // Next params
+                // 次のパラメータ
                 currencyOut = path.currency;
                 amountOut = (zeroForOne ? -amount0 : -amount1).toInt256();
             }
 
-            // currencyOut and amountOut stores currency in and amount in
+            // currencyOutとamountOutには入力通貨と入力量が格納されている
             require(
                 uint256(amountOut) <= uint256(params.amountInMax),
                 "amount in > max"
@@ -358,12 +358,12 @@ contract Router is TStore, IUnlockCallback {
             key: key,
             params: SwapParams({
                 zeroForOne: zeroForOne,
-                // amountSpecified < 0 = amount in
-                // amountSpecified > 0 = amount out
+                // amountSpecified < 0 = 入力量
+                // amountSpecified > 0 = 出力量
                 amountSpecified: amountSpecified,
-                // price = Currency 1 / currency 0
-                // 0 for 1 = price decreases
-                // 1 for 0 = price increases
+                // 価格 = 通貨1 / 通貨0
+                // 0 for 1 = 価格が下がる
+                // 1 for 0 = 価格が上がる
                 sqrtPriceLimitX96: zeroForOne ? MIN_SQRT_PRICE + 1 : MAX_SQRT_PRICE - 1
             }),
             hookData: hookData

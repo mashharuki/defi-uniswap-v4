@@ -5,7 +5,7 @@ import {IStateView} from "../src/interfaces/IStateView.sol";
 import {PoolId, PoolIdLibrary} from "../src/types/PoolId.sol";
 import {STATE_VIEW} from "../src/Constants.sol";
 
-// Helper functions
+// ヘルパー関数
 contract TestUtil {
     IStateView internal constant stateView = IStateView(STATE_VIEW);
 
@@ -19,7 +19,7 @@ contract TestUtil {
         returns (int24)
     {
         int24 compressed = tick / tickSpacing;
-        // Round towards negative infinity
+        // 負の無限大方向に丸める
         if (tick < 0 && tick % tickSpacing != 0) compressed--;
         return compressed * tickSpacing;
     }

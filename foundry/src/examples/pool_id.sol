@@ -15,9 +15,9 @@ import {
 
 /*
 - PoolId = keccak256(PoolKey)
-- User defined value types
-  - wrap() to convert value type into user defined value type
-  - unwrap() to convert value type into user defined value type
+- ユーザー定義値型
+  - wrap()で値型をユーザー定義値型に変換
+  - unwrap()でユーザー定義値型を値型に変換
 
 forge test --match-path src/examples/pool_id.sol -vvv
 */
@@ -35,9 +35,9 @@ contract Example_PoolId is Test {
 
         console.log("--- Pool id ---");
 
-        // unwrap() to convert PoolId into bytes32
+        // unwrap()でPoolIdをbytes32に変換
         bytes32 i = PoolId.unwrap(id);
-        // wrap() to convert bytes32 into PoolId
+        // wrap()でbytes32をPoolIdに変換
         PoolId p = PoolId.wrap(i);
 
         console.logBytes32(i);

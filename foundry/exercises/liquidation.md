@@ -1,42 +1,42 @@
-# Liquidation Exercises
+# 清算演習
 
-In this exercise, you'll write a contract that will
+この演習では、以下を行うコントラクトを書きます：
 
-1. Get a flash loan from Aave V3.
-2. Liquidate an under-collateralized loan on Aave V3.
-3. Use the [`UniversalRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/UniversalRouter.sol) contract to swap collateral received from liquidation into the token that was borrowed.
-4. Repay the flash loan and send profit to `msg.sender`.
+1. Aave V3からフラッシュローンを取得する
+2. Aave V3で担保不足のローンを清算する
+3. [`UniversalRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/UniversalRouter.sol)コントラクトを使用して、清算で受け取った担保を借り入れたトークンにスワップする
+4. フラッシュローンを返済し、利益を`msg.sender`に送信する
 
-The starter code for this exercise is provided in [`foundry/src/exercises/Liquidate.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Liquidate.sol)
+この演習のスターターコードは [`foundry/src/exercises/Liquidate.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Liquidate.sol) にあります
 
-Solution is in [`foundry/src/solutions/Liquidate.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Liquidate.sol)
+ソリューションは [`foundry/src/solutions/Liquidate.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Liquidate.sol) にあります
 
-> **Note**  
-> This exercise uses a flash loan from **Aave V3** because it’s not possible to obtain a flash loan from **Uniswap V4** and then perform a swap on Uniswap V4 via the `UniversalRouter`.  
-> When you get a flash loan from Uniswap V4, the `PoolManager` contract becomes locked, which prevents the `UniversalRouter` from acquiring a lock.  
-> In practice, a more efficient approach would be to take the flash loan directly from Uniswap V4 (since its flash loan fee is **0**) and perform the swap directly through the `PoolManager` contract.  
-> However, in this exercise, the focus is on learning how to interact with the `UniversalRouter` contract.
+> **注意**
+> この演習では**Aave V3**からのフラッシュローンを使用しています。これは、**Uniswap V4**からフラッシュローンを取得し、`UniversalRouter`経由でUniswap V4でスワップを実行することができないためです。
+> Uniswap V4からフラッシュローンを取得すると、`PoolManager`コントラクトがロックされ、`UniversalRouter`がロックを取得できなくなります。
+> 実際には、Uniswap V4から直接フラッシュローンを取得し（手数料が**0**のため）、`PoolManager`コントラクトを通じて直接スワップを実行する方がより効率的です。
+> ただし、この演習では`UniversalRouter`コントラクトとの連携方法を学ぶことに焦点を当てています。
 
-## Task 1 - Initiate liquidation
+## タスク1 - 清算を開始
 
 ```solidity
 function liquidate(
-    // Token to flash loan
+    // フラッシュローンするトークン
     address tokenToRepay,
-    // User to liquidate
+    // 清算するユーザー
     address user,
-    // V4 pool to swap collateral
+    // 担保をスワップするV4プール
     PoolKey calldata key
 ) external {}
 ```
 
-This function initiates a liquidation by obtaining a flash loan.
+この関数はフラッシュローンを取得して清算を開始します。
 
-- Call `liquidator.getDebt` to get the amount of the token needed to repay the under-collateralized loan.
-- Call `flash.flash` to obtain a flash loan. `IFlash` will call back into the `flashCallback` function.
-- Refund any excess `tokenToRepay` to `msg.sender`.
+- `liquidator.getDebt`を呼び出して、担保不足のローンを返済するために必要なトークンの量を取得します
+- `flash.flash`を呼び出してフラッシュローンを取得します。`IFlash`は`flashCallback`関数にコールバックします
+- 余剰の`tokenToRepay`を`msg.sender`に返金します
 
-## Task 2 - Liquidate, swap and repay
+## タスク2 - 清算、スワップ、返済
 
 ```solidity
 function flashCallback(
@@ -45,17 +45,17 @@ function flashCallback(
     uint256 fee,
     bytes calldata data
 ) external {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-This function performs the liquidation, swaps the collateral received into the repayment token, and repays the flash loan.
+この関数は清算を実行し、受け取った担保を返済トークンにスワップし、フラッシュローンを返済します。
 
-- Call `liquidator.liquidate` to liquidate the under-collateralized loan of `user`.
-- Call `swap` to convert the collateral into the token needed to repay the flash loan.
-- Repay the flash loan.
+- `liquidator.liquidate`を呼び出して、`user`の担保不足のローンを清算します
+- `swap`を呼び出して、担保をフラッシュローンの返済に必要なトークンに変換します
+- フラッシュローンを返済します
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/Liquidate.test.sol -vvv

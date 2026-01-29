@@ -4,8 +4,8 @@ pragma solidity 0.8.30;
 import {PoolKey} from "../types/PoolKey.sol";
 import {INotifier} from "./INotifier.sol";
 
-// Note: positionInfo is an user defined value type = uint256
-// See here
+// 注: positionInfoはユーザー定義値型 = uint256
+// 詳細はこちら
 // https://github.com/Uniswap/v4-periphery/blob/main/src/libraries/PositionInfoLibrary.sol
 
 interface IPositionManager is INotifier {
@@ -41,7 +41,7 @@ interface IPositionManager is INotifier {
 
     function poolKeys(bytes25 poolId) external view returns (PoolKey memory);
 
-    // ERC721
+    // ERC721関数
     function ownerOf(uint256 id) external view returns (address owner);
     function approve(address spender, uint256 id) external;
 }

@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-/// @notice Interface for functions to access any transient storage slot in a contract
+/// @notice コントラクト内の任意のトランジェントストレージスロットにアクセスするための関数のインターフェース
 interface IExttload {
-    /// @notice Called by external contracts to access transient storage of the contract
-    /// @param slot Key of slot to tload
-    /// @return value The value of the slot as bytes32
+    /// @notice 外部コントラクトがコントラクトのトランジェントストレージにアクセスするために呼び出される
+    /// @param slot tloadするスロットのキー
+    /// @return value bytes32としてのスロットの値
     function exttload(bytes32 slot) external view returns (bytes32 value);
 
-    /// @notice Called by external contracts to access sparse transient pool state
-    /// @param slots List of slots to tload
-    /// @return values List of loaded values
+    /// @notice 外部コントラクトがスパースなトランジェントプール状態にアクセスするために呼び出される
+    /// @param slots tloadするスロットのリスト
+    /// @return values ロードされた値のリスト
     function exttload(bytes32[] calldata slots)
         external
         view

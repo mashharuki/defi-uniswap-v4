@@ -1,25 +1,25 @@
-# Test setup
+# テストセットアップ
 
 ```shell
-# Fill out environment variables inside .env
+# .env内の環境変数を設定
 cp .env.sample .env
 
-# Build exercises
+# 演習をビルド
 forge build
 
-# Build solutions
+# ソリューションをビルド
 FOUNDRY_PROFILE=solution forge build
 
-# Get block number
+# ブロック番号を取得
 FORK_URL=...
 FORK_BLOCK_NUM=$(cast block-number --rpc-url $FORK_URL)
 
-# Test exercise
+# 演習をテスト
 forge test --fork-url $FORK_URL --fork-block-number $FORK_BLOCK_NUM --match-path test/Router.test.sol -vvv
 
-# Test solution
+# ソリューションをテスト
 FOUNDRY_PROFILE=solution forge test --fork-url $FORK_URL --fork-block-number $FORK_BLOCK_NUM --match-path test/Router.test.sol -vvv
 
-# Try building from scratch if you're having trouble
+# 問題が発生した場合は、最初からビルドし直してください
 forge clean
 ```

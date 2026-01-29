@@ -1,12 +1,12 @@
-# Limit Order Exercises
+# 指値注文演習
 
-In this exercise, you'll learn how to write a limit order hooks contract.
+この演習では、指値注文フックコントラクトの書き方を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/LimitOrder.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/LimitOrder.sol)
+この演習のスターターコードは [`foundry/src/exercises/LimitOrder.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/LimitOrder.sol) にあります
 
-Solution is in [`foundry/src/solutions/LimitOrder.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/LimitOrder.sol)
+ソリューションは [`foundry/src/solutions/LimitOrder.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/LimitOrder.sol) にあります
 
-## Task 1 - After initialize hook
+## タスク1 - 初期化後フック
 
 ```solidity
 function afterInitialize(
@@ -15,14 +15,14 @@ function afterInitialize(
     uint160 sqrtPriceX96,
     int24 tick
 ) external onlyPoolManager returns (bytes4) {
-    // Write your code here
+    // ここにコードを書いてください
     return this.afterInitialize.selector;
 }
 ```
 
-- Store the current tick of the pool into the state variable `ticks`.
+- プールの現在のティックを状態変数`ticks`に保存します。
 
-## Task 2 - Place a limit order
+## タスク2 - 指値注文を発注
 
 ```solidity
 function place(
@@ -31,44 +31,44 @@ function place(
     bool zeroForOne,
     uint128 liquidity
 ) external payable setAction(ADD_LIQUIDITY) {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-This function places a limit order for `msg.sender`.
+この関数は`msg.sender`の指値注文を発注します。
 
-- Revert if `tickLower` is not a multiple of the pool's tick spacing
-- Call `poolManager.unlock` and write code inside `unlockCallback` to add liquidity.
-  - Liquidity must be added between `tickLower` and `tickLower + tickSpacing`.
-  - Revert if liquidity is going to be added to the current tick.
-- Update `Bucket` stored in the current slot.
-  - Call `getBucketId` to get the `Bucket` id.
-  - Current slot for this bucket is stored in `slots[id]`.
-  - Current `Bucket` is stored in `buckets[id][slots[id]]`.
-- Emit `Place` event
+- `tickLower`がプールのティック間隔の倍数でない場合はリバートします
+- `poolManager.unlock`を呼び出し、`unlockCallback`内で流動性を追加するコードを書きます
+  - 流動性は`tickLower`と`tickLower + tickSpacing`の間に追加する必要があります
+  - 現在のティックに流動性が追加される場合はリバートします
+- 現在のスロットに保存されている`Bucket`を更新します
+  - `getBucketId`を呼び出して`Bucket`のIDを取得します
+  - このバケットの現在のスロットは`slots[id]`に保存されています
+  - 現在の`Bucket`は`buckets[id][slots[id]]`に保存されています
+- `Place`イベントを発行します
 
-## Task 3 - Cancel a limit order
+## タスク3 - 指値注文をキャンセル
 
 ```solidity
 function cancel(PoolKey calldata key, int24 tickLower, bool zeroForOne)
     external
     setAction(REMOVE_LIQUIDITY)
 {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-This function cancels a limit order for `msg.sender`.
+この関数は`msg.sender`の指値注文をキャンセルします。
 
-- Revert if the `Bucket` to remove limit order from is `filled`.
-- Remove liquidity for `msg.sender` from the `Bucket`.
-- Call `poolManager.unlock` and write code inside `unlockCallback` to remove liquidity.
-  - Removing liquidity, return fees that accrued to this position.
-  - Allocate the fees to the `Bucket` if liquidity in it is greater than 0.
-  - If liquidity in the `Bucket` is 0, give the fees to `msg.sender`.
-- Emit `Cancel` event
+- 指値注文を削除する`Bucket`が`filled`の場合はリバートします
+- `Bucket`から`msg.sender`の流動性を削除します
+- `poolManager.unlock`を呼び出し、`unlockCallback`内で流動性を削除するコードを書きます
+  - 流動性を削除し、このポジションに発生した手数料を返します
+  - バケット内の流動性が0より大きい場合、手数料を`Bucket`に割り当てます
+  - バケット内の流動性が0の場合、手数料を`msg.sender`に渡します
+- `Cancel`イベントを発行します
 
-## Task 4 - Take swapped token
+## タスク4 - スワップされたトークンを受け取る
 
 ```solidity
 function take(
@@ -77,18 +77,18 @@ function take(
     bool zeroForOne,
     uint256 slot
 ) external {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-This function is called by `msg.sender` to withdraw the tokens that were swapped after their limit order was processed.
+この関数は、指値注文が処理された後にスワップされたトークンを引き出すために`msg.sender`によって呼び出されます。
 
-- Revert if the `Bucket` is not `filled`.
-- Update `Bucket`
-- Send the approriate amount of `currency0` and `currency1` to `msg.sender`.
-- Emit `Take` event
+- `Bucket`が`filled`でない場合はリバートします
+- `Bucket`を更新します
+- 適切な量の`currency0`と`currency1`を`msg.sender`に送信します
+- `Take`イベントを発行します
 
-## Task 5 - After swap hook
+## タスク5 - スワップ後フック
 
 ```solidity
 function afterSwap(
@@ -103,32 +103,32 @@ function afterSwap(
     setAction(REMOVE_LIQUIDITY)
     returns (bytes4, int128)
 {
-    // Write your code here
+    // ここにコードを書いてください
     return (this.afterSwap.selector, 0);
 }
 ```
 
-This hook is triggered after a swap and is responsible for removing liquidity from the processed `Bucket`s.
+このフックはスワップ後にトリガーされ、処理された`Bucket`から流動性を削除する責任があります。
 
-- Find the range of ticks to remove liquidity.
-  - This will range from the last stored tick (`ticks[key.toId()]`) to the current `tick`, both rounded down to a multiple of `tickSpacing` and then `+/-` `tickSpacing`.
-  - Hint: Call `_getTickRange`
-- Remove liquidity from the tick range above.
-  - Set `Bucket.filled` to `true`.
-  - Store the amounts of `currency0` and `currency1` returned into the `Bucket`.
-  - Emit `Fill` event.
-  - Increment the slot for this bucket by 1.
-- Store the latest tick into `ticks[key.toId()]`
+- 流動性を削除するティック範囲を見つけます
+  - 範囲は、最後に保存されたティック（`ticks[key.toId()]`）から現在の`tick`までで、両方とも`tickSpacing`の倍数に切り捨てられ、`+/-` `tickSpacing`されます
+  - ヒント：`_getTickRange`を呼び出してください
+- 上記のティック範囲から流動性を削除します
+  - `Bucket.filled`を`true`に設定します
+  - 返された`currency0`と`currency1`の量を`Bucket`に保存します
+  - `Fill`イベントを発行します
+  - このバケットのスロットを1インクリメントします
+- 最新のティックを`ticks[key.toId()]`に保存します
 
-## Test
+## テスト
 
-1. Find the value of `salt` needed to deploy the hooks contract at a valid address.
+1. 有効なアドレスにフックコントラクトをデプロイするために必要な`salt`の値を見つけます。
 
 ```shell
 forge test --match-path test/FindHookSalt.test.sol -vvv
 ```
 
-2. Export the salt printed to your terminal from executing the command in the previous step.
+2. 前のステップで実行したコマンドにより端末に出力されたsaltをエクスポートします。
 
 ```shell
 export SALT=YOUR_SALT

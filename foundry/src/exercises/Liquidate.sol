@@ -49,17 +49,17 @@ contract Liquidate is IFlashReceiver {
     receive() external payable {}
 
     function liquidate(
-        // Token to flash loan
+        // フラッシュローンするトークン
         address tokenToRepay,
-        // User to liquidate
+        // 清算するユーザー
         address user,
-        // V4 pool to swap collateral
+        // 担保をスワップするV4プール
         PoolKey calldata key
     ) external {
-        // Write your code here
-        // Get token amount to liquidate
-        // Flash loan
-        // Send profit to msg.sender
+        // ここにコードを書いてください
+        // 清算に必要なトークン量を取得
+        // フラッシュローン
+        // msg.senderに利益を送信
     }
 
     function flashCallback(
@@ -68,7 +68,7 @@ contract Liquidate is IFlashReceiver {
         uint256 fee,
         bytes calldata data
     ) external {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function swap(
@@ -85,11 +85,11 @@ contract Liquidate is IFlashReceiver {
             approve(currencyIn, uint160(amountIn), uint48(block.timestamp));
         }
 
-        // UniversalRouter inputs
+        // UniversalRouterの入力
         bytes memory commands = abi.encodePacked(uint8(Commands.V4_SWAP));
         bytes[] memory inputs = new bytes[](1);
 
-        // V4 actions and params
+        // V4アクションとパラメータ
         bytes memory actions = abi.encodePacked(
             uint8(Actions.SWAP_EXACT_IN_SINGLE),
             uint8(Actions.SETTLE_ALL),
@@ -106,12 +106,12 @@ contract Liquidate is IFlashReceiver {
                 hookData: bytes("")
             })
         );
-        // SETTLE_ALL (currency, max amount)
+        // SETTLE_ALL（通貨、最大量）
         params[1] = abi.encode(currencyIn, uint256(amountIn));
-        // TAKE_ALL (currency, min amount)
+        // TAKE_ALL（通貨、最小量）
         params[2] = abi.encode(currencyOut, uint256(amountOutMin));
 
-        // Universal router input
+        // ユニバーサルルーターの入力
         inputs[0] = abi.encode(actions, params);
 
         uint256 msgVal = currencyIn == address(0) ? address(this).balance : 0;

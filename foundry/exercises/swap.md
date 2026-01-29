@@ -1,24 +1,24 @@
-# Swap Exercises
+# スワップ演習
 
-In this exercise, you'll learn how to swap tokens with the [`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol) contract.
+この演習では、[`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol)コントラクトでトークンをスワップする方法を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/Swap.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Swap.sol)
+この演習のスターターコードは [`foundry/src/exercises/Swap.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Swap.sol) にあります
 
-Solution is in [`foundry/src/solutions/Swap.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Swap.sol)
+ソリューションは [`foundry/src/solutions/Swap.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Swap.sol) にあります
 
-## Task 1 - Initiate a swap
+## タスク1 - スワップを開始
 
 ```solidity
 function swap(SwapExactInputSingleHop calldata params) external payable {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-- Determine the currency to take from the caller and transfer it into the contract.
-- Unlock the `PoolManager` contract.
-- Refund any remaining currency that was taken from the caller.
+- 呼び出し元から取得する通貨を決定し、コントラクトに転送します
+- `PoolManager`コントラクトをアンロックします
+- 呼び出し元から取得した残りの通貨を返金します
 
-## Task 2 - Unlock callback
+## タスク2 - アンロックコールバック
 
 ```solidity
 function unlockCallback(bytes calldata data)
@@ -26,15 +26,15 @@ function unlockCallback(bytes calldata data)
     onlyPoolManager
     returns (bytes memory)
 {
-    // Write your code here
+    // ここにコードを書いてください
     return "";
 }
 ```
 
-- Swap currencies with the `PoolManager` contract.
-- Revert if amount out is less than the minimum specified (`SwapExactInputSingleHop.amountOutMin`)
+- `PoolManager`コントラクトで通貨をスワップします
+- 出力量が指定された最小値（`SwapExactInputSingleHop.amountOutMin`）より少ない場合はリバートします
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/Swap.test.sol -vvv

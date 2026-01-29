@@ -1,12 +1,12 @@
-# Universal Router Exercises
+# ユニバーサルルーター演習
 
-In this exercise, you'll learn how to use the [`UniversalRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/UniversalRouter.sol) contract.
+この演習では、[`UniversalRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/UniversalRouter.sol)コントラクトの使い方を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/UniversalRouter.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/UniversalRouter.sol)
+この演習のスターターコードは [`foundry/src/exercises/UniversalRouter.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/UniversalRouter.sol) にあります
 
-Solution is in [`foundry/src/solutions/UniversalRouter.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/UniversalRouter.sol)
+ソリューションは [`foundry/src/solutions/UniversalRouter.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/UniversalRouter.sol) にあります
 
-## Task 1 - Swap
+## タスク1 - スワップ
 
 ```solidity
 function swap(
@@ -15,23 +15,23 @@ function swap(
     uint128 amountOutMin,
     bool zeroForOne
 ) external payable {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Call `UniversalRouter` to swap currencies on Uniswap V4 pool.
+`UniversalRouter`を呼び出して、Uniswap V4プールで通貨をスワップします。
 
-- Transfer currency to swap from `msg.sender` into this contract.
-- Grant `Permit2` approvals to `UniversalRouter`.
-- Prepare the inputs to call `UniversalRouter.execute`.
-  - The command to execute is `Commands.V4_SWAP`.
-  - The input for this command encodes `actions` and `params`.
-    - `actions` are `Actions.SWAP_EXACT_IN_SINGLE`, `Actions.SETTLE_ALL` and `Actions.TAKE_ALL`.
-    - `params` are inputs corresponding to each action. See [`_handleAction`](https://github.com/Uniswap/v4-periphery/blob/60cd93803ac2b7fa65fd6cd351fd5fd4cc8c9db5/src/V4Router.sol#L32-L80) for the correct inputs.
-- Call `UniverswalRouter.execute`
-- Withdraw both currency 0 and 1 to `msg.sender`.
+- スワップする通貨を`msg.sender`からこのコントラクトに転送します
+- `UniversalRouter`に`Permit2`の承認を付与します
+- `UniversalRouter.execute`を呼び出すための入力を準備します
+  - 実行するコマンドは`Commands.V4_SWAP`です
+  - このコマンドの入力は`actions`と`params`をエンコードします
+    - `actions`は`Actions.SWAP_EXACT_IN_SINGLE`、`Actions.SETTLE_ALL`、`Actions.TAKE_ALL`です
+    - `params`は各アクションに対応する入力です。正しい入力については[`_handleAction`](https://github.com/Uniswap/v4-periphery/blob/60cd93803ac2b7fa65fd6cd351fd5fd4cc8c9db5/src/V4Router.sol#L32-L80)を参照してください
+- `UniversalRouter.execute`を呼び出します
+- currency 0とcurrency 1の両方を`msg.sender`に引き出します
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/UniversalRouter.test.sol -vvv

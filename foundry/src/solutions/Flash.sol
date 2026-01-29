@@ -12,7 +12,7 @@ contract Flash is IUnlockCallback {
     using CurrencyLib for address;
 
     IPoolManager public immutable poolManager;
-    // Contract address to test flash loan
+    // フラッシュローンをテストするためのコントラクトアドレス
     address private immutable tester;
 
     modifier onlyPoolManager() {
@@ -35,14 +35,14 @@ contract Flash is IUnlockCallback {
         (address currency, uint256 amount) =
             abi.decode(data, (address, uint256));
 
-        // Borrow
+        // 借り入れ
         poolManager.take({currency: currency, to: address(this), amount: amount});
 
-        // You would write your flash loan logic here
+        // ここにフラッシュローンのロジックを書いてください
         (bool ok,) = tester.call("");
         require(ok, "test failed");
 
-        // Repay
+        // 返済
         poolManager.sync(currency);
 
         if (currency == address(0)) {

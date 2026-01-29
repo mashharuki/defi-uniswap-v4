@@ -29,6 +29,6 @@ contract Reader {
         view
         returns (int256 delta)
     {
-        // Write your code here
+        // ここにコードを書いてください
     }
 }

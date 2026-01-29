@@ -1,23 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-/// @notice Parameter struct for `ModifyLiquidity` pool operations
+/// @notice `ModifyLiquidity`プール操作のパラメータ構造体
 struct ModifyLiquidityParams {
-    // the lower and upper tick of the position
+    // ポジションの下限と上限のtick
     int24 tickLower;
     int24 tickUpper;
-    // how to modify the liquidity
+    // 流動性をどのように変更するか
     int256 liquidityDelta;
-    // a value to set if you want unique liquidity positions at the same range
+    // 同じ範囲でユニークな流動性ポジションが必要な場合に設定する値
     bytes32 salt;
 }
 
-/// @notice Parameter struct for `Swap` pool operations
+/// @notice `Swap`プール操作のパラメータ構造体
 struct SwapParams {
-    /// Whether to swap token0 for token1 or vice versa
+    /// token0をtoken1にスワップするか、その逆か
     bool zeroForOne;
-    /// The desired input amount if negative (exactIn), or the desired output amount if positive (exactOut)
+    /// 負の場合は希望する入力量（exactIn）、正の場合は希望する出力量（exactOut）
     int256 amountSpecified;
-    /// The sqrt price at which, if reached, the swap will stop executing
+    /// 到達した場合にスワップが実行を停止するsqrt価格
     uint160 sqrtPriceLimitX96;
 }

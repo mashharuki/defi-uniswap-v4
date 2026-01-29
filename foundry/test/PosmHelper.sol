@@ -24,7 +24,7 @@ contract PosmHelper {
     bytes32 internal poolId;
     int24 internal constant TICK_SPACING = 10;
 
-    // currency0 = ETH for this exercise
+    // この演習ではcurrency0 = ETH
     constructor() {
         IERC20(USDC).approve(PERMIT2, type(uint256).max);
         IPermit2(PERMIT2).approve(
@@ -55,28 +55,28 @@ contract PosmHelper {
         );
         bytes[] memory params = new bytes[](3);
 
-        // MINT_POSITION params
+        // MINT_POSITIONのパラメータ
         params[0] = abi.encode(
             key,
             tickLower,
             tickUpper,
             liquidity,
-            // amount0Max
+            // amount0の最大値
             type(uint128).max,
-            // amount1Max
+            // amount1の最大値
             type(uint128).max,
-            // owner
+            // オーナー
             address(this),
-            // hook data
+            // hookデータ
             ""
         );
 
-        // SETTLE_PAIR params
-        // currency 0 and 1
+        // SETTLE_PAIRのパラメータ
+        // currency 0と1
         params[1] = abi.encode(address(0), USDC);
 
-        // SWEEP params
-        // currency, address to
+        // SWEEPのパラメータ
+        // 通貨、送信先アドレス
         params[2] = abi.encode(address(0), address(this));
 
         uint256 tokenId = posm.nextTokenId();
@@ -102,26 +102,26 @@ contract PosmHelper {
         );
         bytes[] memory params = new bytes[](4);
 
-        // INCREASE_LIQUIDITY params
+        // INCREASE_LIQUIDITYのパラメータ
         params[0] = abi.encode(
             tokenId,
             liquidity,
             amount0Max,
             amount1Max,
-            // hook data
+            // hookデータ
             ""
         );
 
-        // CLOSE_CURRENCY params
+        // CLOSE_CURRENCYのパラメータ
         // currency 0
         params[1] = abi.encode(address(0), USDC);
 
-        // CLOSE_CURRENCY params
+        // CLOSE_CURRENCYのパラメータ
         // currency 1
         params[2] = abi.encode(USDC);
 
-        // SWEEP params
-        // currency, address to
+        // SWEEPのパラメータ
+        // 通貨、送信先アドレス
         params[3] = abi.encode(address(0), address(this));
 
         posm.modifyLiquidities{value: address(this).balance}(
@@ -140,18 +140,18 @@ contract PosmHelper {
         );
         bytes[] memory params = new bytes[](2);
 
-        // DECREASE_LIQUIDITY params
+        // DECREASE_LIQUIDITYのパラメータ
         params[0] = abi.encode(
             tokenId,
             liquidity,
             amount0Min,
             amount1Min,
-            // hook data
+            // hookデータ
             ""
         );
 
-        // TAKE_PAIR params
-        // currency 0, currency 1, recipient
+        // TAKE_PAIRのパラメータ
+        // currency 0、currency 1、受取人
         params[1] = abi.encode(address(0), USDC, address(this));
 
         posm.modifyLiquidities(abi.encode(actions, params), block.timestamp);
@@ -165,17 +165,17 @@ contract PosmHelper {
         );
         bytes[] memory params = new bytes[](2);
 
-        // BURN_POSITION params
+        // BURN_POSITIONのパラメータ
         params[0] = abi.encode(
             tokenId,
             amount0Min,
             amount1Min,
-            // hook data
+            // hookデータ
             ""
         );
 
-        // TAKE_PAIR params
-        // currency 0, currency 1, recipient
+        // TAKE_PAIRのパラメータ
+        // currency 0、currency 1、受取人
         params[1] = abi.encode(address(0), USDC, address(this));
 
         posm.modifyLiquidities(abi.encode(actions, params), block.timestamp);
@@ -198,7 +198,7 @@ contract PosmHelper {
         (poolKey, p) = posm.getPoolAndPositionInfo(tokenId);
         PositionInfo pos = PositionInfo.wrap(p);
 
-        // Get position ticks
+        // ポジションのtickを取得
         tickLower = pos.tickLower();
         tickUpper = pos.tickUpper();
 

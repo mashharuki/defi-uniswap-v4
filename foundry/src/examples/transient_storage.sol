@@ -4,10 +4,10 @@ pragma solidity 0.8.30;
 import {Test, console} from "forge-std/Test.sol";
 
 /*
-Difference between transient storage and storage (state variables)
-- Transient storages use lower gas
-- Stored value resets after every transaction
-- Use cases: re-entrancy lock, storing context for callbacks
+トランジェントストレージとストレージ(状態変数)の違い
+- トランジェントストレージは低いガスを使用
+- 保存された値は各トランザクション後にリセットされる
+- ユースケース: リエントランシーロック、コールバック用のコンテキスト保存
 
 forge test --match-path src/examples/transient_storage.sol -vvv
 */

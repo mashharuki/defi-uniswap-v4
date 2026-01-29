@@ -59,24 +59,24 @@ contract LimitOrder is TStore {
         uint256 amount1
     );
 
-    // Bucket of limit orders
+    // 指値注文のバケット
     struct Bucket {
         bool filled;
         uint256 amount0;
         uint256 amount1;
-        // Total liquidity
+        // 合計流動性
         uint128 liquidity;
-        // Liquidity provided per user
+        // ユーザーごとに提供された流動性
         mapping(address => uint128) sizes;
     }
 
     IPoolManager public immutable poolManager;
 
-    // Bucket id => current slot to place limit orders
+    // バケットID => 指値注文を配置する現在のスロット
     mapping(bytes32 => uint256) public slots;
-    // Bucket id => slot => Bucket
+    // バケットID => スロット => バケット
     mapping(bytes32 => mapping(uint256 => Bucket)) public buckets;
-    // Pool id => last tick
+    // プールID => 最後のティック
     mapping(PoolId => int24) public ticks;
 
     modifier onlyPoolManager() {
@@ -195,7 +195,7 @@ contract LimitOrder is TStore {
                 data, (address, uint256, PoolKey, int24, bool, uint128)
             );
 
-            // Add liquidity
+            // 流動性を追加
             (int256 d,) = poolManager.modifyLiquidity({
                 key: key,
                 params: ModifyLiquidityParams({
@@ -223,7 +223,7 @@ contract LimitOrder is TStore {
                 amountToPay = (-amount1).toUint256();
             }
 
-            // Sync + pay + settle
+            // 同期 + 支払い + 決済
             poolManager.sync(currency);
             if (currency == address(0)) {
                 require(msgVal >= amountToPay, "Not enough ETH sent");
@@ -305,11 +305,11 @@ contract LimitOrder is TStore {
         (uint256 amount0, uint256 amount1, uint256 fee0, uint256 fee1) =
             abi.decode(res, (uint256, uint256, uint256, uint256));
 
-        // Last user to cancel receives all fees
+        // 最後にキャンセルしたユーザーがすべての手数料を受け取る
         if (bucket.liquidity > 0) {
             bucket.amount0 += fee0;
             bucket.amount1 += fee1;
-            // amount0 and 1 include fees
+            // amount0と1には手数料が含まれている
             if (amount0 > fee0) {
                 key.currency0.transferOut(msg.sender, amount0 - fee0);
             }
@@ -350,7 +350,7 @@ contract LimitOrder is TStore {
         require(size > 0, "size = 0");
         bucket.sizes[msg.sender] = 0;
 
-        // Note: recommended to use mulDiv here
+        // 注意: ここではmulDivの使用を推奨します
         uint256 amount0 = bucket.amount0 * size / liquidity;
         uint256 amount1 = bucket.amount1 * size / liquidity;
 
@@ -412,7 +412,7 @@ contract LimitOrder is TStore {
         returns (int24)
     {
         int24 compressed = tick / tickSpacing;
-        // Round towards negative infinity
+        // 負の無限大方向に丸める
         if (tick < 0 && tick % tickSpacing != 0) compressed--;
         return compressed * tickSpacing;
     }
@@ -422,9 +422,9 @@ contract LimitOrder is TStore {
         pure
         returns (int24 lower, int24 upper)
     {
-        // Last lower tick
+        // 前回の下限ティック
         int24 l0 = _getTickLower(tick0, tickSpacing);
-        // Current lower tick
+        // 現在の下限ティック
         int24 l1 = _getTickLower(tick1, tickSpacing);
 
         if (tick0 <= tick1) {
@@ -455,7 +455,7 @@ contract LimitOrder is TStore {
             hookData: ""
         });
 
-        // delta includes fee0 and fee1
+        // deltaにはfee0とfee1が含まれている
         BalanceDelta delta = BalanceDelta.wrap(d);
         if (delta.amount0() > 0) {
             amount0 = uint256(uint128(delta.amount0()));

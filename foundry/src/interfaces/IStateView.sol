@@ -4,13 +4,13 @@ pragma solidity 0.8.30;
 import {PoolId} from "../types/PoolId.sol";
 
 interface IStateView {
-    /// @notice Get Slot0 of the pool: sqrtPriceX96, tick, protocolFee, lpFee
-    /// @dev Corresponds to pools[poolId].slot0
-    /// @param poolId The ID of the pool.
-    /// @return sqrtPriceX96 The square root of the price of the pool, in Q96 precision.
-    /// @return tick The current tick of the pool.
-    /// @return protocolFee The protocol fee of the pool.
-    /// @return lpFee The swap fee of the pool.
+    /// @notice プールのSlot0を取得: sqrtPriceX96、tick、protocolFee、lpFee
+    /// @dev pools[poolId].slot0に対応
+    /// @param poolId プールのID
+    /// @return sqrtPriceX96 Q96精度でのプールの価格の平方根
+    /// @return tick プールの現在のtick
+    /// @return protocolFee プールのプロトコル手数料
+    /// @return lpFee プールのスワップ手数料
     function getSlot0(PoolId poolId)
         external
         view
@@ -21,14 +21,14 @@ interface IStateView {
             uint24 lpFee
         );
 
-    /// @notice Retrieves the tick information of a pool at a specific tick.
-    /// @dev Corresponds to pools[poolId].ticks[tick]
-    /// @param poolId The ID of the pool.
-    /// @param tick The tick to retrieve information for.
-    /// @return liquidityGross The total position liquidity that references this tick
-    /// @return liquidityNet The amount of net liquidity added (subtracted) when tick is crossed from left to right (right to left)
-    /// @return feeGrowthOutside0X128 fee growth per unit of liquidity on the _other_ side of this tick (relative to the current tick)
-    /// @return feeGrowthOutside1X128 fee growth per unit of liquidity on the _other_ side of this tick (relative to the current tick)
+    /// @notice 特定のtickでのプールのtick情報を取得
+    /// @dev pools[poolId].ticks[tick]に対応
+    /// @param poolId プールのID
+    /// @param tick 情報を取得するtick
+    /// @return liquidityGross このtickを参照する総ポジション流動性
+    /// @return liquidityNet tickが左から右（右から左）に横切られた時に追加（減算）されるネット流動性の量
+    /// @return feeGrowthOutside0X128 このtickの反対側（現在のtickに対して）での流動性単位あたりの手数料成長
+    /// @return feeGrowthOutside1X128 このtickの反対側（現在のtickに対して）での流動性単位あたりの手数料成長
     function getTickInfo(PoolId poolId, int24 tick)
         external
         view
@@ -39,67 +39,67 @@ interface IStateView {
             uint256 feeGrowthOutside1X128
         );
 
-    /// @notice Retrieves the liquidity information of a pool at a specific tick.
-    /// @dev Corresponds to pools[poolId].ticks[tick].liquidityGross and pools[poolId].ticks[tick].liquidityNet. A more gas efficient version of getTickInfo
-    /// @param poolId The ID of the pool.
-    /// @param tick The tick to retrieve liquidity for.
-    /// @return liquidityGross The total position liquidity that references this tick
-    /// @return liquidityNet The amount of net liquidity added (subtracted) when tick is crossed from left to right (right to left)
+    /// @notice 特定のtickでのプールの流動性情報を取得
+    /// @dev pools[poolId].ticks[tick].liquidityGrossとpools[poolId].ticks[tick].liquidityNetに対応。getTickInfoのよりガス効率の良いバージョン
+    /// @param poolId プールのID
+    /// @param tick 流動性を取得するtick
+    /// @return liquidityGross このtickを参照する総ポジション流動性
+    /// @return liquidityNet tickが左から右（右から左）に横切られた時に追加（減算）されるネット流動性の量
     function getTickLiquidity(PoolId poolId, int24 tick)
         external
         view
         returns (uint128 liquidityGross, int128 liquidityNet);
 
-    /// @notice Retrieves the fee growth outside a tick range of a pool
-    /// @dev Corresponds to pools[poolId].ticks[tick].feeGrowthOutside0X128 and pools[poolId].ticks[tick].feeGrowthOutside1X128. A more gas efficient version of getTickInfo
-    /// @param poolId The ID of the pool.
-    /// @param tick The tick to retrieve fee growth for.
-    /// @return feeGrowthOutside0X128 fee growth per unit of liquidity on the _other_ side of this tick (relative to the current tick)
-    /// @return feeGrowthOutside1X128 fee growth per unit of liquidity on the _other_ side of this tick (relative to the current tick)
+    /// @notice プールのtick範囲外の手数料成長を取得
+    /// @dev pools[poolId].ticks[tick].feeGrowthOutside0X128とpools[poolId].ticks[tick].feeGrowthOutside1X128に対応。getTickInfoのよりガス効率の良いバージョン
+    /// @param poolId プールのID
+    /// @param tick 手数料成長を取得するtick
+    /// @return feeGrowthOutside0X128 このtickの反対側（現在のtickに対して）での流動性単位あたりの手数料成長
+    /// @return feeGrowthOutside1X128 このtickの反対側（現在のtickに対して）での流動性単位あたりの手数料成長
     function getTickFeeGrowthOutside(PoolId poolId, int24 tick)
         external
         view
         returns (uint256 feeGrowthOutside0X128, uint256 feeGrowthOutside1X128);
 
-    /// @notice Retrieves the global fee growth of a pool.
-    /// @dev Corresponds to pools[poolId].feeGrowthGlobal0X128 and pools[poolId].feeGrowthGlobal1X128
-    /// @param poolId The ID of the pool.
-    /// @return feeGrowthGlobal0 The global fee growth for token0.
-    /// @return feeGrowthGlobal1 The global fee growth for token1.
+    /// @notice プールのグローバル手数料成長を取得
+    /// @dev pools[poolId].feeGrowthGlobal0X128とpools[poolId].feeGrowthGlobal1X128に対応
+    /// @param poolId プールのID
+    /// @return feeGrowthGlobal0 token0のグローバル手数料成長
+    /// @return feeGrowthGlobal1 token1のグローバル手数料成長
     function getFeeGrowthGlobals(PoolId poolId)
         external
         view
         returns (uint256 feeGrowthGlobal0, uint256 feeGrowthGlobal1);
 
-    /// @notice Retrieves the total liquidity of a pool.
-    /// @dev Corresponds to pools[poolId].liquidity
-    /// @param poolId The ID of the pool.
-    /// @return liquidity The liquidity of the pool.
+    /// @notice プールの総流動性を取得
+    /// @dev pools[poolId].liquidityに対応
+    /// @param poolId プールのID
+    /// @return liquidity プールの流動性
     function getLiquidity(PoolId poolId)
         external
         view
         returns (uint128 liquidity);
 
-    /// @notice Retrieves the tick bitmap of a pool at a specific tick.
-    /// @dev Corresponds to pools[poolId].tickBitmap[tick]
-    /// @param poolId The ID of the pool.
-    /// @param tick The tick to retrieve the bitmap for.
-    /// @return tickBitmap The bitmap of the tick.
+    /// @notice 特定のtickでのプールのtickビットマップを取得
+    /// @dev pools[poolId].tickBitmap[tick]に対応
+    /// @param poolId プールのID
+    /// @param tick ビットマップを取得するtick
+    /// @return tickBitmap tickのビットマップ
     function getTickBitmap(PoolId poolId, int16 tick)
         external
         view
         returns (uint256 tickBitmap);
 
-    /// @notice Retrieves the position info without needing to calculate the `positionId`.
-    /// @dev Corresponds to pools[poolId].positions[positionId]
-    /// @param poolId The ID of the pool.
-    /// @param owner The owner of the liquidity position.
-    /// @param tickLower The lower tick of the liquidity range.
-    /// @param tickUpper The upper tick of the liquidity range.
-    /// @param salt The bytes32 randomness to further distinguish position state.
-    /// @return liquidity The liquidity of the position.
-    /// @return feeGrowthInside0LastX128 The fee growth inside the position for token0.
-    /// @return feeGrowthInside1LastX128 The fee growth inside the position for token1.
+    /// @notice `positionId`を計算する必要なくポジション情報を取得
+    /// @dev pools[poolId].positions[positionId]に対応
+    /// @param poolId プールのID
+    /// @param owner 流動性ポジションの所有者
+    /// @param tickLower 流動性範囲の下限tick
+    /// @param tickUpper 流動性範囲の上限tick
+    /// @param salt ポジション状態をさらに区別するためのbytes32のランダム性
+    /// @return liquidity ポジションの流動性
+    /// @return feeGrowthInside0LastX128 token0のポジション内の手数料成長
+    /// @return feeGrowthInside1LastX128 token1のポジション内の手数料成長
     function getPositionInfo(
         PoolId poolId,
         address owner,
@@ -115,13 +115,13 @@ interface IStateView {
             uint256 feeGrowthInside1LastX128
         );
 
-    /// @notice Retrieves the position information of a pool at a specific position ID.
-    /// @dev Corresponds to pools[poolId].positions[positionId]
-    /// @param poolId The ID of the pool.
-    /// @param positionId The ID of the position.
-    /// @return liquidity The liquidity of the position.
-    /// @return feeGrowthInside0LastX128 The fee growth inside the position for token0.
-    /// @return feeGrowthInside1LastX128 The fee growth inside the position for token1.
+    /// @notice 特定のポジションIDでのプールのポジション情報を取得
+    /// @dev pools[poolId].positions[positionId]に対応
+    /// @param poolId プールのID
+    /// @param positionId ポジションのID
+    /// @return liquidity ポジションの流動性
+    /// @return feeGrowthInside0LastX128 token0のポジション内の手数料成長
+    /// @return feeGrowthInside1LastX128 token1のポジション内の手数料成長
     function getPositionInfo(PoolId poolId, bytes32 positionId)
         external
         view
@@ -131,23 +131,23 @@ interface IStateView {
             uint256 feeGrowthInside1LastX128
         );
 
-    /// @notice Retrieves the liquidity of a position.
-    /// @dev Corresponds to pools[poolId].positions[positionId].liquidity. More gas efficient for just retrieving liquidity as compared to getPositionInfo
-    /// @param poolId The ID of the pool.
-    /// @param positionId The ID of the position.
-    /// @return liquidity The liquidity of the position.
+    /// @notice ポジションの流動性を取得
+    /// @dev pools[poolId].positions[positionId].liquidityに対応。getPositionInfoと比較して流動性のみを取得する場合によりガス効率が良い
+    /// @param poolId プールのID
+    /// @param positionId ポジションのID
+    /// @return liquidity ポジションの流動性
     function getPositionLiquidity(PoolId poolId, bytes32 positionId)
         external
         view
         returns (uint128 liquidity);
 
-    /// @notice Calculate the fee growth inside a tick range of a pool
-    /// @dev pools[poolId].feeGrowthInside0LastX128 in Position.Info is cached and can become stale. This function will calculate the up to date feeGrowthInside
-    /// @param poolId The ID of the pool.
-    /// @param tickLower The lower tick of the range.
-    /// @param tickUpper The upper tick of the range.
-    /// @return feeGrowthInside0X128 The fee growth inside the tick range for token0.
-    /// @return feeGrowthInside1X128 The fee growth inside the tick range for token1.
+    /// @notice プールのtick範囲内の手数料成長を計算
+    /// @dev Position.InfoのfeeGrowthInside0LastX128はキャッシュされており古くなる可能性がある。この関数は最新のfeeGrowthInsideを計算する
+    /// @param poolId プールのID
+    /// @param tickLower 範囲の下限tick
+    /// @param tickUpper 範囲の上限tick
+    /// @return feeGrowthInside0X128 token0のtick範囲内の手数料成長
+    /// @return feeGrowthInside1X128 token1のtick範囲内の手数料成長
     function getFeeGrowthInside(PoolId poolId, int24 tickLower, int24 tickUpper)
         external
         view

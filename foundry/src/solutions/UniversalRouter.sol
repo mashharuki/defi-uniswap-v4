@@ -32,11 +32,11 @@ contract UniversalRouterExercises {
             approve(currencyIn, uint160(amountIn), uint48(block.timestamp));
         }
 
-        // UniversalRouter inputs
+        // UniversalRouterの入力
         bytes memory commands = abi.encodePacked(uint8(Commands.V4_SWAP));
         bytes[] memory inputs = new bytes[](1);
 
-        // V4 actions and params
+        // V4のアクションとパラメータ
         bytes memory actions = abi.encodePacked(
             uint8(Actions.SWAP_EXACT_IN_SINGLE),
             uint8(Actions.SETTLE_ALL),
@@ -53,17 +53,17 @@ contract UniversalRouterExercises {
                 hookData: bytes("")
             })
         );
-        // SETTLE_ALL (currency, max amount)
+        // SETTLE_ALL (通貨, 最大量)
         params[1] = abi.encode(currencyIn, uint256(amountIn));
-        // TAKE_ALL (currency, min amount)
+        // TAKE_ALL (通貨, 最小量)
         params[2] = abi.encode(currencyOut, uint256(amountOutMin));
 
-        // Universal router input
+        // UniversalRouterの入力
         inputs[0] = abi.encode(actions, params);
 
         router.execute{value: msg.value}(commands, inputs, block.timestamp);
 
-        // Withdraw currencies to msg.sender
+        // 通貨をmsg.senderに引き出す
         withdraw(key.currency0, msg.sender);
         withdraw(key.currency1, msg.sender);
     }

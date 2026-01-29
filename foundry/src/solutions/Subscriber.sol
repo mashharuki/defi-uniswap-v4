@@ -10,7 +10,7 @@ import {PoolId, PoolIdLibrary} from "../types/PoolId.sol";
 import {POSITION_MANAGER, USDC, PERMIT2} from "../Constants.sol";
 
 contract Token {
-    // Pool id => owner => uint256
+    // プールID => 所有者 => uint256
     mapping(bytes32 => mapping(address => uint256)) public balanceOf;
 
     function _mint(bytes32 poolId, address dst, uint256 amount) internal {
@@ -44,10 +44,10 @@ contract Subscriber is ISubscriber, Token {
         view
         returns (bytes32 poolId, address owner, uint128 liquidity)
     {
-        // NOTE: data are deleted before notifyUnsubscribe and notifyBurn
+        // 注意: データはnotifyUnsubscribeとnotifyBurnの前に削除されます
         (PoolKey memory key,) = posm.getPoolAndPositionInfo(tokenId);
         poolId = PoolId.unwrap(key.toId());
-        // NOTE: ownerOf reverts if tokenId doesn't exist
+        // 注意: tokenIdが存在しない場合、ownerOfはリバートします
         owner = posm.ownerOf(tokenId);
         liquidity = posm.getPositionLiquidity(tokenId);
     }
@@ -78,8 +78,8 @@ contract Subscriber is ISubscriber, Token {
         int256 feesAccrued
     ) external onlyPositionManager {
         bytes32 poolId = poolIds[tokenId];
-        // NOTE: Position liquidity may be > balanceOf[poolId][owner]
-        // since positions accumulate fees
+        // 注意: ポジションの流動性はbalanceOf[poolId][owner]より大きい場合があります
+        // ポジションは手数料を蓄積するため
         _burn(poolId, owner, balanceOf[poolId][owner]);
         delete poolIds[tokenId];
         delete ownerOf[tokenId];

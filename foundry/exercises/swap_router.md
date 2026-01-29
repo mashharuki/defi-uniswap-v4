@@ -1,12 +1,12 @@
-# Router Exercises
+# ルーター演習
 
-In this exercise, you'll learn how to swap tokens with the [`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol) contract.
+この演習では、[`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol)コントラクトでトークンをスワップする方法を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/Router.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Router.sol)
+この演習のスターターコードは [`foundry/src/exercises/Router.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Router.sol) にあります
 
-Solution is in [`foundry/src/solutions/Router.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Router.sol)
+ソリューションは [`foundry/src/solutions/Router.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Router.sol) にあります
 
-## Task 1 - Single hop swap exact input
+## タスク1 - シングルホップスワップ（入力量指定）
 
 ```solidity
 function swapExactInputSingle(ExactInputSingleParams calldata params)
@@ -15,21 +15,21 @@ function swapExactInputSingle(ExactInputSingleParams calldata params)
     setAction(SWAP_EXACT_IN_SINGLE)
     returns (uint256 amountOut)
 {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Implement this function so it performs a swap against a single pool in the `PoolManager` contract.
+この関数を実装して、`PoolManager`コントラクトの単一プールに対してスワップを実行します。
 
-- Swap the full amount of the input currency specified by `ExactInputSingleParams.amountIn` for the maximum possible amount of the other currency in the pool.
+- `ExactInputSingleParams.amountIn`で指定された入力通貨の全量を、プール内の他の通貨の最大可能量とスワップします
 
-- Revert if the received output amount is less than `ExactInputSingleParams.amountOutMin`.
+- 受け取った出力量が`ExactInputSingleParams.amountOutMin`より少ない場合はリバートします
 
-- Return any unused tokens back to the caller.
+- 未使用のトークンを呼び出し元に返却します
 
-- Return the amount of currency out (`amountOut`).
+- 出力通貨の量（`amountOut`）を返します
 
-## Task 2 - Single hop swap exact output
+## タスク2 - シングルホップスワップ（出力量指定）
 
 ```solidity
 function swapExactOutputSingle(ExactOutputSingleParams calldata params)
@@ -38,21 +38,21 @@ function swapExactOutputSingle(ExactOutputSingleParams calldata params)
     setAction(SWAP_EXACT_OUT_SINGLE)
     returns (uint256 amountIn)
 {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Implement this function so it performs a swap against a single pool in the `PoolManager` contract.
+この関数を実装して、`PoolManager`コントラクトの単一プールに対してスワップを実行します。
 
-- Swap the minimum amount of the input currency for the exact amount of output specified by `ExactOutputSingleParams.amountOut` of the other currency in the pool.
+- 最小量の入力通貨を、`ExactOutputSingleParams.amountOut`で指定された正確な出力量のプール内の他の通貨とスワップします
 
-- Revert if the input amount is greater than `ExactOutputSingleParams.amountInMax`.
+- 入力量が`ExactOutputSingleParams.amountInMax`より大きい場合はリバートします
 
-- Return any unused tokens back to the caller.
+- 未使用のトークンを呼び出し元に返却します
 
-- Return the amount of currency in (`amountIn`)
+- 入力通貨の量（`amountIn`）を返します
 
-## Task 3 - Multi hops swap exact input
+## タスク3 - マルチホップスワップ（入力量指定）
 
 ```solidity
 function swapExactInput(ExactInputParams calldata params)
@@ -61,21 +61,21 @@ function swapExactInput(ExactInputParams calldata params)
     setAction(SWAP_EXACT_IN)
     returns (uint256 amountOut)
 {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Implement this function so it performs a swap against multiple pools in the `PoolManager` contract.
+この関数を実装して、`PoolManager`コントラクトの複数プールに対してスワップを実行します。
 
-- Swap the full amount of the input currency specified by `ExactInputParams.amountIn` for the maximum possible amount of the final currency specified in the last element of `ExactInputParams.path`.
+- `ExactInputParams.amountIn`で指定された入力通貨の全量を、`ExactInputParams.path`の最後の要素で指定された最終通貨の最大可能量とスワップします
 
-- Revert if the received output amount is less than `ExactInputParams.amountOutMin`.
+- 受け取った出力量が`ExactInputParams.amountOutMin`より少ない場合はリバートします
 
-- Return any unused tokens back to the caller.
+- 未使用のトークンを呼び出し元に返却します
 
-- Return the amount of currency out (`amountOut`).
+- 出力通貨の量（`amountOut`）を返します
 
-## Task 4 - Multi hops swap exact output
+## タスク4 - マルチホップスワップ（出力量指定）
 
 ```solidity
 function swapExactOutput(ExactOutputParams calldata params)
@@ -84,21 +84,21 @@ function swapExactOutput(ExactOutputParams calldata params)
     setAction(SWAP_EXACT_OUT)
     returns (uint256 amountIn)
 {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Implement this function so it performs a swap against multiple pools in the `PoolManager` contract.
+この関数を実装して、`PoolManager`コントラクトの複数プールに対してスワップを実行します。
 
-- Swap the minimum amount of the input currency for the exact amount of output specified by `ExactOutputParams.amountOut` of the final currency specified in `ExactOutputParams.currencyOut`.
+- 最小量の入力通貨を、`ExactOutputParams.amountOut`で指定された`ExactOutputParams.currencyOut`で指定された最終通貨の正確な出力量とスワップします
 
-- Revert if the input amount is greater than `ExactOutputParams.amountInMax`.
+- 入力量が`ExactOutputParams.amountInMax`より大きい場合はリバートします
 
-- Return any unused tokens back to the caller.
+- 未使用のトークンを呼び出し元に返却します
 
-- Return the amount of currency in (`amountIn`)
+- 入力通貨の量（`amountIn`）を返します
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --fork-block-number $FORK_BLOCK_NUM --match-path test/Router.test.sol -vvv

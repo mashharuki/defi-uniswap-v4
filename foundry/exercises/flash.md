@@ -1,23 +1,23 @@
-# Flash Exercises
+# フラッシュローン演習
 
-In this exercise, you'll learn how to execute a flash loan from the [`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol) contract.
+この演習では、[`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol)コントラクトからフラッシュローンを実行する方法を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/Flash.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Flash.sol)
+この演習のスターターコードは [`foundry/src/exercises/Flash.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Flash.sol) にあります
 
-Solution is in [`foundry/src/solutions/Flash.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Flash.sol)
+ソリューションは [`foundry/src/solutions/Flash.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Flash.sol) にあります
 
-## Task 1 - Initiate a flash loan
+## タスク1 - フラッシュローンを開始
 
 ```solidity
 function flash(address currency, uint256 amount) external {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-- Unlock the `PoolManager` contract by calling `PoolManager.unlock`
-- ABI encode or store the inputs (`currency` and `amount`) in storage.
+- `PoolManager.unlock`を呼び出して`PoolManager`コントラクトをアンロックします
+- 入力値（`currency`と`amount`）をABIエンコードするか、ストレージに保存します
 
-## Task 2 - Unlock callback
+## タスク2 - アンロックコールバック
 
 ```solidity
 function unlockCallback(bytes calldata data)
@@ -25,17 +25,17 @@ function unlockCallback(bytes calldata data)
     onlyPoolManager
     returns (bytes memory)
 {
-    // Write your code here
+    // ここにコードを書いてください
     return "";
 }
 ```
 
-- Implement the `unlockCallback`
-- Take out flash loan of `currency` for the `amount` specified when the function `flash` was called.
-- Immediately after borrowing the `currency` from the `PoolManager` contract, call `tester.call("")`.
-  This external call will check that the flash loan was taken out correctly.
+- `unlockCallback`を実装します
+- `flash`関数が呼び出された際に指定された`amount`分の`currency`のフラッシュローンを実行します
+- `PoolManager`コントラクトから`currency`を借り入れた直後に、`tester.call("")`を呼び出します。
+  この外部呼び出しにより、フラッシュローンが正しく実行されたかが検証されます。
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/Flash.test.sol -vvv

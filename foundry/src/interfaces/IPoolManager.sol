@@ -7,38 +7,38 @@ import {PoolKey} from "../types/PoolKey.sol";
 import {ModifyLiquidityParams, SwapParams} from "../types/PoolOperation.sol";
 
 interface IPoolManager is IExtsload, IExttload {
-    /// @notice Thrown when a currency is not netted out after the contract is unlocked
+    /// @notice コントラクトがアンロックされた後に通貨がネットされていない場合にスロー
     error CurrencyNotSettled();
 
-    /// @notice Thrown when trying to interact with a non-initialized pool
+    /// @notice 初期化されていないプールとやり取りしようとした時にスロー
     error PoolNotInitialized();
 
-    /// @notice Thrown when unlock is called, but the contract is already unlocked
+    /// @notice unlockが呼ばれたが、コントラクトが既にアンロックされている場合にスロー
     error AlreadyUnlocked();
 
-    /// @notice Thrown when a function is called that requires the contract to be unlocked, but it is not
+    /// @notice コントラクトがアンロックされている必要がある関数が呼ばれたが、アンロックされていない場合にスロー
     error ManagerLocked();
 
-    /// @notice Pools are limited to type(int16).max tickSpacing in #initialize, to prevent overflow
+    /// @notice オーバーフローを防ぐため、プールは#initializeでtype(int16).maxのtickSpacingに制限される
     error TickSpacingTooLarge(int24 tickSpacing);
 
-    /// @notice Pools must have a positive non-zero tickSpacing passed to #initialize
+    /// @notice プールは#initializeに正の非ゼロtickSpacingを渡す必要がある
     error TickSpacingTooSmall(int24 tickSpacing);
 
-    /// @notice PoolKey must have currencies where address(currency0) < address(currency1)
+    /// @notice PoolKeyはaddress(currency0) < address(currency1)となる通貨を持つ必要がある
     error CurrenciesOutOfOrderOrEqual(address currency0, address currency1);
 
-    /// @notice Thrown when a call to updateDynamicLPFee is made by an address that is not the hook,
-    /// or on a pool that does not have a dynamic swap fee.
+    /// @notice hookではないアドレスからupdateDynamicLPFeeが呼ばれた場合、
+    /// または動的スワップ手数料を持たないプールで呼ばれた場合にスロー
     error UnauthorizedDynamicLPFeeUpdate();
 
-    /// @notice Thrown when trying to swap amount of 0
+    /// @notice 0の量でスワップしようとした時にスロー
     error SwapAmountCannotBeZero();
 
-    ///@notice Thrown when native currency is passed to a non native settlement
+    ///@notice ネイティブ通貨以外の決済にネイティブ通貨が渡された時にスロー
     error NonzeroNativeValue();
 
-    /// @notice Thrown when `clear` is called with an amount that is not exactly equal to the open currency delta.
+    /// @notice オープンな通貨デルタと正確に等しくない量で`clear`が呼ばれた時にスロー
     error MustClearExactPositiveDelta();
 
     function unlock(bytes calldata data) external returns (bytes memory);

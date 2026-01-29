@@ -1,39 +1,39 @@
-# Subscriber Exercises
+# サブスクライバー演習
 
-In this exercise, you'll learn how to write a subscriber contract for the [`PositionManager`](https://github.com/Uniswap/v4-periphery/blob/main/src/PositionManager.sol) contract.
+この演習では、[`PositionManager`](https://github.com/Uniswap/v4-periphery/blob/main/src/PositionManager.sol)コントラクト用のサブスクライバーコントラクトの書き方を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/Subscriber.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Subscriber.sol)
+この演習のスターターコードは [`foundry/src/exercises/Subscriber.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Subscriber.sol) にあります
 
-Solution is in [`foundry/src/solutions/Subscriber.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Subscriber.sol)
+ソリューションは [`foundry/src/solutions/Subscriber.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Subscriber.sol) にあります
 
-The `Subscriber` contract mints and burns non-transferable tokens corresponding to the amount of liquidity a user adds or removes.
+`Subscriber`コントラクトは、ユーザーが追加または削除した流動性の量に対応する譲渡不可トークンをミントおよびバーンします。
 
-## Task 1 - Notify subscribe
+## タスク1 - サブスクライブ通知
 
 ```solidity
 function notifySubscribe(uint256 tokenId, bytes memory data)
     external
     onlyPositionManager
 {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-- Mint the amount of liquidity locked in `tokenId`, to the owner of `tokenId`.
-- Store the `PoolId` and the owner of `tokenId` into the state variables `poolIds` and `ownerOf`. These data will be later used by `notifyUnsubscribe` and `notifyBurn`.
+- `tokenId`にロックされている流動性の量を、`tokenId`の所有者にミントします
+- `tokenId`の`PoolId`と所有者を状態変数`poolIds`と`ownerOf`に保存します。これらのデータは後で`notifyUnsubscribe`と`notifyBurn`で使用されます。
 
-## Task 2 - Notify unsubscribe
+## タスク2 - サブスクライブ解除通知
 
 ```solidity
 function notifyUnsubscribe(uint256 tokenId) external onlyPositionManager {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-- Burn all the non-transferable token for `tokenId`
-- Delete data in `poolIds` and `ownerOf` for `tokenId`.
+- `tokenId`のすべての譲渡不可トークンをバーンします
+- `tokenId`の`poolIds`と`ownerOf`のデータを削除します。
 
-## Task 3 - Notify burn
+## タスク3 - バーン通知
 
 ```solidity
 function notifyBurn(
@@ -43,14 +43,14 @@ function notifyBurn(
     uint256 liquidity,
     int256 feesAccrued
 ) external onlyPositionManager {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-- Burn all the non-transferable token for `tokenId`
-- Delete data in `poolIds` and `ownerOf` for `tokenId`.
+- `tokenId`のすべての譲渡不可トークンをバーンします
+- `tokenId`の`poolIds`と`ownerOf`のデータを削除します。
 
-## Task 4 - Notify modify liquidity
+## タスク4 - 流動性変更通知
 
 ```solidity
 function notifyModifyLiquidity(
@@ -58,13 +58,13 @@ function notifyModifyLiquidity(
     int256 liquidityChange,
     int256 feesAccrued
 ) external onlyPositionManager {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-- Mint additional non-transferable token if `liquidityChange` is positive, otherwise burn.
+- `liquidityChange`が正の場合は追加の譲渡不可トークンをミントし、そうでなければバーンします。
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/Subscriber.test.sol -vvv

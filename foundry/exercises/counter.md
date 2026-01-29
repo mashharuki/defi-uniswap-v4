@@ -1,12 +1,12 @@
-# Counter Hooks Exercises
+# カウンターフック演習
 
-In this exercise, you'll learn how to write a custom hooks contract.
+この演習では、カスタムフックコントラクトの書き方を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/CounterHook.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/CounterHook.sol)
+この演習のスターターコードは [`foundry/src/exercises/CounterHook.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/CounterHook.sol) にあります
 
-Solution is in [`foundry/src/solutions/CounterHook.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/CounterHook.sol)
+ソリューションは [`foundry/src/solutions/CounterHook.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/CounterHook.sol) にあります
 
-## Task 1 - Configure hook permissions
+## タスク1 - フックパーミッションの設定
 
 ```solidity
 function getHookPermissions()
@@ -33,29 +33,29 @@ function getHookPermissions()
 }
 ```
 
-Set `beforeAddLiquidity`, `beforeRemoveLiquidity`, `beforeSwap` and `afterSwap` to `true`.
+`beforeAddLiquidity`、`beforeRemoveLiquidity`、`beforeSwap`、`afterSwap`を`true`に設定してください。
 
-## Task 2 - Increment counts
+## タスク2 - カウントをインクリメント
 
-For each hook functions above, increment the state variable `counts`.
+上記の各フック関数で、状態変数`counts`をインクリメントしてください。
 
-`counts` is a nested mapping from `PoolId`, name of the function, to the number of times the function was called.
+`counts`は`PoolId`と関数名から、その関数が呼び出された回数へのネストされたマッピングです。
 
-For example the current count of `afterSwap` is
+例えば、`afterSwap`の現在のカウントは以下のように取得できます：
 
 ```solidity
 counts[key.toId()]["beforeSwap"]
 ```
 
-## Test
+## テスト
 
-1. Find the value of `salt` needed to deploy the hooks contract at a valid address.
+1. 有効なアドレスにフックコントラクトをデプロイするために必要な`salt`の値を見つけます。
 
 ```shell
 forge test --match-path test/FindHookSalt.test.sol -vvv
 ```
 
-2. Export the salt printed to your terminal from executing the command in the previous step.
+2. 前のステップで実行したコマンドにより端末に出力されたsaltをエクスポートします。
 
 ```shell
 export SALT=YOUR_SALT

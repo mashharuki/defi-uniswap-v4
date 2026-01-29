@@ -14,7 +14,7 @@ contract PosmExercises {
 
     IPositionManager constant posm = IPositionManager(POSITION_MANAGER);
 
-    // currency0 = ETH for this exercise
+    // この演習ではcurrency0 = ETH
     constructor(address currency1) {
         IERC20(currency1).approve(PERMIT2, type(uint256).max);
         IPermit2(PERMIT2).approve(
@@ -37,7 +37,7 @@ contract PosmExercises {
         );
         bytes[] memory params = new bytes[](3);
 
-        // MINT_POSITION params
+        // MINT_POSITIONパラメータ
         params[0] = abi.encode(
             key,
             tickLower,
@@ -53,12 +53,12 @@ contract PosmExercises {
             ""
         );
 
-        // SETTLE_PAIR params
-        // currency 0 and 1
+        // SETTLE_PAIRパラメータ
+        // currency 0と1
         params[1] = abi.encode(address(0), USDC);
 
-        // SWEEP params
-        // currency, address to
+        // SWEEPパラメータ
+        // currency、送信先アドレス
         params[2] = abi.encode(address(0), address(this));
 
         uint256 tokenId = posm.nextTokenId();
@@ -76,7 +76,7 @@ contract PosmExercises {
         uint128 amount0Max,
         uint128 amount1Max
     ) external payable {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function decreaseLiquidity(
@@ -85,12 +85,12 @@ contract PosmExercises {
         uint128 amount0Min,
         uint128 amount1Min
     ) external {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function burn(uint256 tokenId, uint128 amount0Min, uint128 amount1Min)
         external
     {
-        // Write your code here
+        // ここにコードを書いてください
     }
 }
