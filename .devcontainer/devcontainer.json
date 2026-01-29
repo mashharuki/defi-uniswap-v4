@@ -1,0 +1,54 @@
+{
+  "name": "Uniswap V4 Development",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/rust:1": {
+      "version": "latest",
+      "profile": "default"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "JuanBlanco.solidity",
+        "NomicFoundation.hardhat-solidity",
+        "tintinweb.solidity-visual-auditor",
+        "tintinweb.vscode-solidity-language",
+        "rust-lang.rust-analyzer"
+      ],
+      "settings": {
+        "solidity.compileUsingRemoteVersion": "v0.8.24",
+        "solidity.formatter": "forge",
+        "solidity.packageDefaultDependenciesContractsDirectory": "src",
+        "solidity.packageDefaultDependenciesDirectory": "lib",
+        "[solidity]": {
+          "editor.defaultFormatter": "JuanBlanco.solidity"
+        }
+      }
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  "remoteUser": "vscode",
+  
+  "mounts": [
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached"
+  ],
+
+  "forwardPorts": [],
+  
+  "runArgs": [
+    "--cap-add=SYS_PTRACE",
+    "--security-opt",
+    "seccomp=unconfined"
+  ]
+}
