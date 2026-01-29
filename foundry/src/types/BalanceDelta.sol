@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-/// @dev Two `int128` values packed into a single `int256` where the upper 128 bits represent the amount0
-/// and the lower 128 bits represent the amount1.
+/// @dev 2つの`int128`値を1つの`int256`にパックし、上位128ビットがamount0を、
+/// 下位128ビットがamount1を表す。
 type BalanceDelta is int256;
 
-/// @notice Library for getting the amount0 and amount1 deltas from the BalanceDelta type
+/// @notice BalanceDelta型からamount0とamount1のデルタを取得するためのライブラリ
 library BalanceDeltaLibrary {
-    /// @notice A BalanceDelta of 0
+    /// @notice 0のBalanceDelta
     BalanceDelta public constant ZERO_DELTA = BalanceDelta.wrap(0);
 
     function amount0(BalanceDelta balanceDelta)

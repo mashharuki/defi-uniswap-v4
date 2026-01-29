@@ -1,22 +1,22 @@
 # Uniswap V4
 
-## What you will learn
+## 学習内容
 
-- Uniswap V4 core contracts
+- Uniswap V4 コアコントラクト
   - [`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol)
   - [`PositionManager`](https://github.com/Uniswap/v4-periphery/blob/main/src/PositionManager.sol)
-- Auxillary contract
+- 補助コントラクト
   - [`UniversalRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/UniversalRouter.sol)
-- Uniswap V4 hooks
+- Uniswap V4 フック
 
-## Why should you take this course?
+## このコースを受講すべき理由
 
-- Develop smart contracts that interact with Uniswap V4 contracts
-- Audit and bug bounties
+- Uniswap V4コントラクトと連携するスマートコントラクトの開発
+- 監査およびバグバウンティ
 
-## Prerequisites
+## 前提条件
 
 - Solidity + Foundry
-  - How to read from storage slots (`extsload`)
-  - User defined types (`Currency`, `PoolId`, etc...)
-- Uniswap V3 (math and state variables like `slot0`, `ticks`, `feeGrowthGlobal`, etc..)
+  - ストレージスロットからの読み取り方法（`extsload`）
+  - ユーザー定義型（`Currency`、`PoolId`など）
+- Uniswap V3（数学および`slot0`、`ticks`、`feeGrowthGlobal`などの状態変数）

@@ -15,7 +15,7 @@ contract SwapV3ToV4 {
 
     receive() external payable {}
 
-    // Swap token A -> V3 -> token B -> V4 -> token C
+    // スワップ: トークンA -> V3 -> トークンB -> V4 -> トークンC
     struct V3Params {
         address tokenIn;
         address tokenOut;
@@ -29,13 +29,13 @@ contract SwapV3ToV4 {
     }
 
     function swap(V3Params calldata v3, V4Params calldata v4) external {
-        // Disable WETH pools to keep the code simple
+        // コードを簡潔に保つためWETHプールは無効化
         require(
             v4.key.currency0 != WETH && v4.key.currency1 != WETH,
             "WETH pools disabled"
         );
 
-        // Map address(0) to WETH
+        // address(0)をWETHにマッピング
         (address v4Token0, address v4Token1) =
             (v4.key.currency0, v4.key.currency1);
         if (v4Token0 == address(0)) {
@@ -50,9 +50,9 @@ contract SwapV3ToV4 {
             ? (v4.key.currency0, v4.key.currency1)
             : (v4.key.currency1, v4.key.currency0);
 
-        // Write your code here
+        // ここにコードを書いてください
 
-        // UniversalRouter commands and inputs
+        // UniversalRouterコマンドと入力
         bytes memory commands;
         bytes[] memory inputs;
     }

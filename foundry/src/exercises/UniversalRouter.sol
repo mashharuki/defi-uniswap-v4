@@ -22,13 +22,13 @@ contract UniversalRouterExercises {
         uint128 amountOutMin,
         bool zeroForOne
     ) external payable {
-        // Write your code here
+        // ここにコードを書いてください
 
-        // UniversalRouter inputs
+        // UniversalRouterの入力
         bytes memory commands;
         bytes[] memory inputs = new bytes[](1);
 
-        // V4 actions and params
+        // V4アクションとパラメータ
         bytes memory actions;
         bytes[] memory params = new bytes[](3);
     }

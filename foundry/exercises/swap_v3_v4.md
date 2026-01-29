@@ -1,24 +1,24 @@
-# Swap V3 to V4 Exercises
+# V3からV4へのスワップ演習
 
-In this exercise, you'll learn how to use the [`UniversalRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/UniversalRouter.sol) contract to execute a multi hop swap from V3 to V4.
+この演習では、[`UniversalRouter`](https://github.com/Uniswap/universal-router/blob/main/contracts/UniversalRouter.sol)コントラクトを使用して、V3からV4へのマルチホップスワップを実行する方法を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/SwapV3ToV4.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/SwapV3ToV4.sol)
+この演習のスターターコードは [`foundry/src/exercises/SwapV3ToV4.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/SwapV3ToV4.sol) にあります
 
-Solution is in [`foundry/src/solutions/SwapV3ToV4.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/SwapV3ToV4.sol)
+ソリューションは [`foundry/src/solutions/SwapV3ToV4.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/SwapV3ToV4.sol) にあります
 
-## Task 1 - Swap
+## タスク1 - スワップ
 
 ```solidity
 function swap(V3Params calldata v3, V4Params calldata v4) external {}
 ```
 
-Call `UniversalRouter` to swap token `A` to `B` on Uniswap V3 pool and then swap `B` to `C` on V4 pool.
+`UniversalRouter`を呼び出して、Uniswap V3プールでトークン`A`を`B`にスワップし、次にV4プールで`B`を`C`にスワップします。
 
-- Transfer `v3.tokenIn` from `msg.sender` to the `UniversalRouter` contract.
-- Call `UniverswalRouter.execute` with the commands `V3_SWAP_EXACT_IN`, `UNWRAP_WETH` (if `v3.tokenOut` is `WETH`) and then `V4_SWAP`.
-- Withdraw swapped currency to `msg.sender`.
+- `v3.tokenIn`を`msg.sender`から`UniversalRouter`コントラクトに転送します
+- `V3_SWAP_EXACT_IN`、`UNWRAP_WETH`（`v3.tokenOut`が`WETH`の場合）、そして`V4_SWAP`のコマンドで`UniversalRouter.execute`を呼び出します
+- スワップされた通貨を`msg.sender`に引き出します
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/SwapV3ToV4.test.sol -vvv

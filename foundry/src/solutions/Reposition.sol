@@ -30,10 +30,10 @@ contract Reposition {
 
         address owner = posm.ownerOf(tokenId);
 
-        // Get pool key
+        // プールキーを取得
         (PoolKey memory key,) = posm.getPoolAndPositionInfo(tokenId);
 
-        // Reposition
+        // ポジションを再配置
         bytes memory actions = abi.encodePacked(
             uint8(Actions.BURN_POSITION),
             uint8(Actions.MINT_POSITION_FROM_DELTAS),
@@ -41,18 +41,18 @@ contract Reposition {
         );
         bytes[] memory params = new bytes[](3);
 
-        // BURN_POSITION params
+        // BURN_POSITIONのパラメータ
         params[0] = abi.encode(
             tokenId,
             // amount0Min
             0,
             // amount1Min
             0,
-            // hook data
+            // hookデータ
             ""
         );
 
-        // MINT_POSITION_FROM_DELTAS params
+        // MINT_POSITION_FROM_DELTASのパラメータ
         params[1] = abi.encode(
             key,
             tickLower,
@@ -61,14 +61,14 @@ contract Reposition {
             type(uint128).max,
             // amount1Max
             type(uint128).max,
-            // owner
+            // 所有者
             owner,
-            // hook data
+            // hookデータ
             ""
         );
 
-        // TAKE_PAIR params
-        // currency 0, currency 1, recipient
+        // TAKE_PAIRのパラメータ
+        // 通貨0, 通貨1, 受取人
         params[2] = abi.encode(key.currency0, key.currency1, owner);
 
         newTokenId = posm.nextTokenId();

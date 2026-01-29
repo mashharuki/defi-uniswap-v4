@@ -44,11 +44,11 @@ contract Swap is IUnlockCallback {
         onlyPoolManager
         returns (bytes memory)
     {
-        // Write your code here
+        // ここにコードを書いてください
         return "";
     }
 
     function swap(SwapExactInputSingleHop calldata params) external payable {
-        // Write your code here
+        // ここにコードを書いてください
     }
 }

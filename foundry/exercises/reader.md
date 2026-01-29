@@ -1,12 +1,12 @@
-# Reader Exercise
+# リーダー演習
 
-In this exercise, you'll learn how to read transient storage from the [`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol) contract.
+この演習では、[`PoolManager`](https://github.com/Uniswap/v4-core/blob/main/src/PoolManager.sol)コントラクトからトランジェントストレージを読み取る方法を学びます。
 
-The starter code for this exercise is provided in [`foundry/src/exercises/Reader.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Reader.sol)
+この演習のスターターコードは [`foundry/src/exercises/Reader.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/exercises/Reader.sol) にあります
 
-Solution is in [`foundry/src/solutions/Reader.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Reader.sol)
+ソリューションは [`foundry/src/solutions/Reader.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/src/solutions/Reader.sol) にあります
 
-## Task 1 - Get currency delta
+## タスク1 - 通貨デルタを取得
 
 ```solidity
 function getCurrencyDelta(address target, address currency)
@@ -14,15 +14,15 @@ function getCurrencyDelta(address target, address currency)
     view
     returns (int256 delta)
 {
-    // Write your code here
+    // ここにコードを書いてください
 }
 ```
 
-Get the currency delta identified by `target` and `currency`.
+`target`と`currency`で識別される通貨デルタを取得します。
 
-The test will take tokens from the `PoolManager` contract to check the currency delta store in the `PoolManager` with the value returned from your code.
+テストでは`PoolManager`コントラクトからトークンを取り出し、`PoolManager`に保存されている通貨デルタと、あなたのコードから返される値を比較して検証します。
 
-## Test
+## テスト
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/Reader.test.sol -vvv

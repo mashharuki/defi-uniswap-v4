@@ -12,7 +12,7 @@ contract Flash is IUnlockCallback {
     using CurrencyLib for address;
 
     IPoolManager public immutable poolManager;
-    // Contract address to test flash loan
+    // フラッシュローンをテストするためのコントラクトアドレス
     address private immutable tester;
 
     modifier onlyPoolManager() {
@@ -32,11 +32,11 @@ contract Flash is IUnlockCallback {
         onlyPoolManager
         returns (bytes memory)
     {
-        // Write your code here
+        // ここにコードを書いてください
         return "";
     }
 
     function flash(address currency, uint256 amount) external {
-        // Write your code here
+        // ここにコードを書いてください
     }
 }

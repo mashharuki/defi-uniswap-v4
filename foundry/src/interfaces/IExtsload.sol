@@ -1,25 +1,25 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-/// @notice Interface for functions to access any storage slot in a contract
+/// @notice コントラクト内の任意のストレージスロットにアクセスするための関数のインターフェース
 interface IExtsload {
-    /// @notice Called by external contracts to access granular pool state
-    /// @param slot Key of slot to sload
-    /// @return value The value of the slot as bytes32
+    /// @notice 外部コントラクトが詳細なプール状態にアクセスするために呼び出される
+    /// @param slot sloadするスロットのキー
+    /// @return value bytes32としてのスロットの値
     function extsload(bytes32 slot) external view returns (bytes32 value);
 
-    /// @notice Called by external contracts to access granular pool state
-    /// @param startSlot Key of slot to start sloading from
-    /// @param nSlots Number of slots to load into return value
-    /// @return values List of loaded values.
+    /// @notice 外部コントラクトが詳細なプール状態にアクセスするために呼び出される
+    /// @param startSlot sloadを開始するスロットのキー
+    /// @param nSlots 戻り値にロードするスロットの数
+    /// @return values ロードされた値のリスト
     function extsload(bytes32 startSlot, uint256 nSlots)
         external
         view
         returns (bytes32[] memory values);
 
-    /// @notice Called by external contracts to access sparse pool state
-    /// @param slots List of slots to SLOAD from.
-    /// @return values List of loaded values.
+    /// @notice 外部コントラクトがスパースなプール状態にアクセスするために呼び出される
+    /// @param slots SLOADするスロットのリスト
+    /// @return values ロードされた値のリスト
     function extsload(bytes32[] calldata slots)
         external
         view

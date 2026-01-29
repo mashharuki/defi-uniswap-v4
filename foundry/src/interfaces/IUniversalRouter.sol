@@ -2,25 +2,25 @@
 pragma solidity 0.8.30;
 
 interface IUniversalRouter {
-    /// @notice Thrown when a required command has failed
+    /// @notice 必要なコマンドが失敗した時にスロー
     error ExecutionFailed(uint256 commandIndex, bytes message);
 
-    /// @notice Thrown when attempting to send ETH directly to the contract
+    /// @notice コントラクトに直接ETHを送信しようとした時にスロー
     error ETHNotAccepted();
 
-    /// @notice Thrown when executing commands with an expired deadline
+    /// @notice 期限切れのデッドラインでコマンドを実行しようとした時にスロー
     error TransactionDeadlinePassed();
 
-    /// @notice Thrown when attempting to execute commands and an incorrect number of inputs are provided
+    /// @notice コマンドを実行しようとして、入力の数が正しくない場合にスロー
     error LengthMismatch();
 
-    // @notice Thrown when an address that isn't WETH tries to send ETH to the router without calldata
+    // @notice WETHでないアドレスがcalldataなしでルーターにETHを送信しようとした時にスロー
     error InvalidEthSender();
 
-    /// @notice Executes encoded commands along with provided inputs. Reverts if deadline has expired.
-    /// @param commands A set of concatenated commands, each 1 byte in length
-    /// @param inputs An array of byte strings containing abi encoded inputs for each command
-    /// @param deadline The deadline by which the transaction must be executed
+    /// @notice エンコードされたコマンドを提供された入力と共に実行する。デッドラインが過ぎている場合はリバート
+    /// @param commands 連結されたコマンドのセット、それぞれ1バイトの長さ
+    /// @param inputs 各コマンドのabiエンコードされた入力を含むバイト文字列の配列
+    /// @param deadline トランザクションが実行されなければならないデッドライン
     function execute(
         bytes calldata commands,
         bytes[] calldata inputs,

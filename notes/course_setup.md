@@ -1,7 +1,7 @@
-# Course setup
+# コースセットアップ
 
-## Exercises
+## 演習
 
-- Exercises are in [`foundry/exercises`](https://github.com/Cyfrin/defi-uniswap-v4/foundry/exercises)
-- Solutions are in [`foundry/src/solutions`](https://github.com/Cyfrin/defi-uniswap-v4/foundry/src/solutions)
-- See [`foundry/README.md`](https://github.com/Cyfrin/defi-uniswap-v4/foundry/README.md) for build and test commands
+- 演習は [`foundry/exercises`](https://github.com/Cyfrin/defi-uniswap-v4/foundry/exercises) にあります
+- ソリューションは [`foundry/src/solutions`](https://github.com/Cyfrin/defi-uniswap-v4/foundry/src/solutions) にあります
+- ビルドおよびテストコマンドについては [`foundry/README.md`](https://github.com/Cyfrin/defi-uniswap-v4/foundry/README.md) を参照してください

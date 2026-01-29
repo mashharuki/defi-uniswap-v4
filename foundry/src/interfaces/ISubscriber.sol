@@ -5,25 +5,25 @@ pragma solidity 0.8.30;
 // PositionInfo = uint256
 
 /// @title ISubscriber
-/// @notice Interface that a Subscriber contract should implement to receive updates from the v4 position manager
+/// @notice v4 position managerから更新を受け取るためにサブスクライバーコントラクトが実装すべきインターフェース
 interface ISubscriber {
-    /// @notice Called when a position subscribes to this subscriber contract
-    /// @param tokenId the token ID of the position
-    /// @param data additional data passed in by the caller
+    /// @notice ポジションがこのサブスクライバーコントラクトに登録した時に呼び出される
+    /// @param tokenId ポジションのトークンID
+    /// @param data 呼び出し元から渡された追加データ
     function notifySubscribe(uint256 tokenId, bytes memory data) external;
 
-    /// @notice Called when a position unsubscribes from the subscriber
-    /// @dev This call's gas is capped at `unsubscribeGasLimit` (set at deployment)
-    /// @dev Because of EIP-150, solidity may only allocate 63/64 of gasleft()
-    /// @param tokenId the token ID of the position
+    /// @notice ポジションがサブスクライバーから登録解除した時に呼び出される
+    /// @dev この呼び出しのガスは`unsubscribeGasLimit`（デプロイ時に設定）で制限される
+    /// @dev EIP-150により、solidityはgasleft()の63/64のみを割り当てる可能性がある
+    /// @param tokenId ポジションのトークンID
     function notifyUnsubscribe(uint256 tokenId) external;
 
-    /// @notice Called when a position is burned
-    /// @param tokenId the token ID of the position
-    /// @param owner the current owner of the tokenId
-    /// @param info information about the position
-    /// @param liquidity the amount of liquidity decreased in the position, may be 0
-    /// @param feesAccrued the fees accrued by the position if liquidity was decreased
+    /// @notice ポジションがバーンされた時に呼び出される
+    /// @param tokenId ポジションのトークンID
+    /// @param owner tokenIdの現在の所有者
+    /// @param info ポジションに関する情報
+    /// @param liquidity ポジションで減少した流動性の量、0の場合もある
+    /// @param feesAccrued 流動性が減少した場合にポジションが蓄積した手数料
     function notifyBurn(
         uint256 tokenId,
         address owner,
@@ -32,13 +32,13 @@ interface ISubscriber {
         int256 feesAccrued
     ) external;
 
-    /// @notice Called when a position modifies its liquidity or collects fees
-    /// @param tokenId the token ID of the position
-    /// @param liquidityChange the change in liquidity on the underlying position
-    /// @param feesAccrued the fees to be collected from the position as a result of the modifyLiquidity call
-    /// @dev Note that feesAccrued can be artificially inflated by a malicious user
-    /// Pools with a single liquidity position can inflate feeGrowthGlobal (and consequently feesAccrued) by donating to themselves;
-    /// atomically donating and collecting fees within the same unlockCallback may further inflate feeGrowthGlobal/feesAccrued
+    /// @notice ポジションが流動性を変更したり手数料を収集した時に呼び出される
+    /// @param tokenId ポジションのトークンID
+    /// @param liquidityChange 基礎となるポジションの流動性変化
+    /// @param feesAccrued modifyLiquidity呼び出しの結果としてポジションから収集される手数料
+    /// @dev feesAccruedは悪意のあるユーザーによって人為的に膨張させることができることに注意
+    /// 単一の流動性ポジションを持つプールは、自分自身に寄付することでfeeGrowthGlobal（したがってfeesAccrued）を膨張させることができる。
+    /// 同じunlockCallback内で原子的に寄付と手数料収集を行うと、feeGrowthGlobal/feesAccruedをさらに膨張させる可能性がある
     function notifyModifyLiquidity(
         uint256 tokenId,
         int256 liquidityChange,

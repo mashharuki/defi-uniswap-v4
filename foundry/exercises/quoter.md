@@ -1,37 +1,37 @@
-# Mixed Route Quoter Exercises
+# ミックスドルートクォーター演習
 
-In this exercise, you'll learn how to use the [`MixedRouteQuoterV2`](https://github.com/Uniswap/mixed-quoter/blob/main/src/MixedRouteQuoterV2.sol) contract.
+この演習では、[`MixedRouteQuoterV2`](https://github.com/Uniswap/mixed-quoter/blob/main/src/MixedRouteQuoterV2.sol)コントラクトの使い方を学びます。
 
-## Task 1 - `git clone`
+## タスク1 - `git clone`
 
-Git clone the repository [`mixed-quoter`](https://github.com/Uniswap/mixed-quoter/tree/main)
+[`mixed-quoter`](https://github.com/Uniswap/mixed-quoter/tree/main)リポジトリをクローンします
 
 ```shell
 git clone git@github.com:Uniswap/mixed-quoter.git
 ```
 
-## Task 2 - Install and compile the repository
+## タスク2 - リポジトリをインストールしてコンパイル
 
-Inside `mixed-quoter` repository
+`mixed-quoter`リポジトリ内で実行します
 
 ```shell
 npm i
 forge build
 ```
 
-## Task 3 - Comment out enivorment variables
+## タスク3 - 環境変数をコメントアウト
 
-Comment out the environment variables in [`foundry.toml`](https://github.com/Uniswap/mixed-quoter/blob/d576527bff2e7c9db5434bb2b3806fd184610865/foundry.toml#L12-L53) under `rpc_endpoints` and `etherscan`.
+[`foundry.toml`](https://github.com/Uniswap/mixed-quoter/blob/d576527bff2e7c9db5434bb2b3806fd184610865/foundry.toml#L12-L53)の`rpc_endpoints`と`etherscan`の下にある環境変数をコメントアウトします。
 
-These environment variables are not needed for this exercise.
+これらの環境変数はこの演習には必要ありません。
 
-## Task 4 - Copy `MixedRouteQuoterV2Example.sol`
+## タスク4 - `MixedRouteQuoterV2Example.sol`をコピー
 
-Copy [`MixedRouteQuoterV2Example.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/exercises/MixedRouteQuoterV2Example.sol) into [`test`](https://github.com/Uniswap/mixed-quoter/tree/main/test) folder.
+[`MixedRouteQuoterV2Example.sol`](https://github.com/Cyfrin/defi-uniswap-v4/blob/main/foundry/exercises/MixedRouteQuoterV2Example.sol)を[`test`](https://github.com/Uniswap/mixed-quoter/tree/main/test)フォルダにコピーします。
 
-## Test
+## テスト
 
-Execute the test command inside the `mixed-quoter` repository.
+`mixed-quoter`リポジトリ内でテストコマンドを実行します。
 
 ```shell
 forge test --fork-url $FORK_URL --match-path test/MixedRouteQuoterV2Example.sol -vvv

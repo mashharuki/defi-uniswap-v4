@@ -10,7 +10,7 @@ import {PoolId, PoolIdLibrary} from "../types/PoolId.sol";
 import {POSITION_MANAGER, USDC, PERMIT2} from "../Constants.sol";
 
 contract Token {
-    // Pool id => owner => uint256
+    // プールID => オーナー => uint256
     mapping(bytes32 => mapping(address => uint256)) public balanceOf;
 
     function _mint(bytes32 poolId, address dst, uint256 amount) internal {
@@ -24,7 +24,7 @@ contract Token {
 
 contract Subscriber is ISubscriber, Token {
     using PoolIdLibrary for PoolKey;
-    // PositionManager
+    // ポジションマネージャー
 
     IPositionManager public immutable posm = IPositionManager(POSITION_MANAGER);
     mapping(uint256 tokenId => bytes32 poolId) private poolIds;
@@ -44,10 +44,10 @@ contract Subscriber is ISubscriber, Token {
         view
         returns (bytes32 poolId, address owner, uint128 liquidity)
     {
-        // NOTE: data are deleted before notifyUnsubscribe and notifyBurn
+        // 注意: notifyUnsubscribeとnotifyBurnの前にデータは削除されます
         (PoolKey memory key,) = posm.getPoolAndPositionInfo(tokenId);
         poolId = PoolId.unwrap(key.toId());
-        // NOTE: ownerOf reverts if tokenId doesn't exist
+        // 注意: tokenIdが存在しない場合、ownerOfはリバートします
         owner = posm.ownerOf(tokenId);
         liquidity = posm.getPositionLiquidity(tokenId);
     }
@@ -56,11 +56,11 @@ contract Subscriber is ISubscriber, Token {
         external
         onlyPositionManager
     {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function notifyUnsubscribe(uint256 tokenId) external onlyPositionManager {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function notifyBurn(
@@ -70,7 +70,7 @@ contract Subscriber is ISubscriber, Token {
         uint256 liquidity,
         int256 feesAccrued
     ) external onlyPositionManager {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function notifyModifyLiquidity(
@@ -78,7 +78,7 @@ contract Subscriber is ISubscriber, Token {
         int256 liquidityChange,
         int256 feesAccrued
     ) external onlyPositionManager {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function min(uint256 x, uint256 y) private pure returns (uint256) {

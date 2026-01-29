@@ -59,24 +59,24 @@ contract LimitOrder is TStore {
         uint256 amount1
     );
 
-    // Bucket of limit orders
+    // 指値注文のバケット
     struct Bucket {
         bool filled;
         uint256 amount0;
         uint256 amount1;
-        // Total liquidity
+        // 合計流動性
         uint128 liquidity;
-        // Liquidity provided per user
+        // ユーザーごとの提供流動性
         mapping(address => uint128) sizes;
     }
 
     IPoolManager public immutable poolManager;
 
-    // Bucket id => current slot to place limit orders
+    // バケットID => 指値注文を配置する現在のスロット
     mapping(bytes32 => uint256) public slots;
-    // Bucket id => slot => Bucket
+    // バケットID => スロット => バケット
     mapping(bytes32 => mapping(uint256 => Bucket)) public buckets;
-    // Pool id => last tick
+    // プールID => 最後のティック
     mapping(PoolId => int24) public ticks;
 
     modifier onlyPoolManager() {
@@ -120,7 +120,7 @@ contract LimitOrder is TStore {
         uint160 sqrtPriceX96,
         int24 tick
     ) external onlyPoolManager returns (bytes4) {
-        // Write your code here
+        // ここにコードを書いてください
         return this.afterInitialize.selector;
     }
 
@@ -136,7 +136,7 @@ contract LimitOrder is TStore {
         setAction(REMOVE_LIQUIDITY)
         returns (bytes4, int128)
     {
-        // Write your code here
+        // ここにコードを書いてください
         return (this.afterSwap.selector, 0);
     }
 
@@ -148,9 +148,9 @@ contract LimitOrder is TStore {
         uint256 action = _getAction();
 
         if (action == ADD_LIQUIDITY) {
-            // Write your code here
+            // ここにコードを書いてください
         } else if (action == REMOVE_LIQUIDITY) {
-            // Write your code here
+            // ここにコードを書いてください
         }
 
         revert("Invalid action");
@@ -162,14 +162,14 @@ contract LimitOrder is TStore {
         bool zeroForOne,
         uint128 liquidity
     ) external payable setAction(ADD_LIQUIDITY) {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function cancel(PoolKey calldata key, int24 tickLower, bool zeroForOne)
         external
         setAction(REMOVE_LIQUIDITY)
     {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function take(
@@ -178,7 +178,7 @@ contract LimitOrder is TStore {
         bool zeroForOne,
         uint256 slot
     ) external {
-        // Write your code here
+        // ここにコードを書いてください
     }
 
     function getBucketId(PoolId poolId, int24 tick, bool zeroForOne)
@@ -221,7 +221,7 @@ contract LimitOrder is TStore {
         returns (int24)
     {
         int24 compressed = tick / tickSpacing;
-        // Round towards negative infinity
+        // 負の無限大方向に丸める
         if (tick < 0 && tick % tickSpacing != 0) compressed--;
         return compressed * tickSpacing;
     }
@@ -231,9 +231,9 @@ contract LimitOrder is TStore {
         pure
         returns (int24 lower, int24 upper)
     {
-        // Last lower tick
+        // 前回の下限ティック
         int24 l0 = _getTickLower(tick0, tickSpacing);
-        // Current lower tick
+        // 現在の下限ティック
         int24 l1 = _getTickLower(tick1, tickSpacing);
 
         if (tick0 <= tick1) {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-// Copied from
+// 以下からコピー
 // https://github.com/Uniswap/v4-core/blob/main/src/libraries/StateLibrary.sol
 
 import {IPoolManager} from "../interfaces/IPoolManager.sol";
@@ -20,23 +20,23 @@ library StateLibrary {
             uint24 lpFee
         )
     {
-        // slot key of Pool.State value: `pools[poolId]`
+        // Pool.State値のslotキー: `pools[poolId]`
         bytes32 stateSlot = _getPoolStateSlot(poolId);
 
         bytes32 data = IPoolManager(manager).extsload(stateSlot);
 
-        //   24 bits  |24bits|24bits      |24 bits|160 bits
+        //   24ビット  |24ビット|24ビット     |24ビット|160ビット
         // 0x000000   |000bb8|000000      |ffff75 |0000000000000000fe3aa841ba359daa0ea9eff7
         // ---------- | fee  |protocolfee | tick  | sqrtPriceX96
         assembly ("memory-safe") {
-            // bottom 160 bits of data
+            // dataの下位160ビット
             sqrtPriceX96 :=
                 and(data, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
-            // next 24 bits of data
+            // dataの次の24ビット
             tick := signextend(2, shr(160, data))
-            // next 24 bits of data
+            // dataの次の24ビット
             protocolFee := and(shr(184, data), 0xFFFFFF)
-            // last 24 bits of data
+            // dataの最後の24ビット
             lpFee := and(shr(208, data), 0xFFFFFF)
         }
     }

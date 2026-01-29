@@ -3,23 +3,23 @@ pragma solidity 0.8.30;
 
 interface IPermit2 {
     struct PermitDetails {
-        // ERC20 token address
+        // ERC20トークンアドレス
         address token;
-        // the maximum amount allowed to spend
+        // 使用が許可される最大量
         uint160 amount;
-        // timestamp at which a spender's token allowances become invalid
+        // spenderのトークン許可が無効になるタイムスタンプ
         uint48 expiration;
-        // an incrementing value indexed per owner,token,and spender for each signature
+        // 各署名に対してowner、token、spenderごとにインデックスされるインクリメント値
         uint48 nonce;
     }
-    /// @notice The permit message signed for a single token allowance
+    /// @notice 単一トークン許可のために署名されたpermitメッセージ
 
     struct PermitSingle {
-        // the permit data for a single token alownce
+        // 単一トークン許可のためのpermitデータ
         PermitDetails details;
-        // address permissioned on the allowed tokens
+        // 許可されたトークンに対する権限を持つアドレス
         address spender;
-        // deadline on the permit signature
+        // permit署名のデッドライン
         uint256 sigDeadline;
     }
 
@@ -31,11 +31,11 @@ interface IPermit2 {
         uint48 expiration
     ) external;
 
-    /// @notice A map from token owner address and a caller specified word index to a bitmap. Used to set bits in the bitmap to prevent against signature replay protection
-    /// @dev Uses unordered nonces so that permit messages do not need to be spent in a certain order
-    /// @dev The mapping is indexed first by the token owner, then by an index specified in the nonce
-    /// @dev It returns a uint256 bitmap
-    /// @dev The index, or wordPosition is capped at type(uint248).max
+    /// @notice トークン所有者アドレスと呼び出し元が指定したワードインデックスからビットマップへのマップ。署名リプレイ保護のためにビットマップのビットを設定するために使用
+    /// @dev permitメッセージが特定の順序で使用される必要がないように、順序なしのnonceを使用
+    /// @dev マッピングはまずトークン所有者、次にnonceで指定されたインデックスでインデックス付けされる
+    /// @dev uint256ビットマップを返す
+    /// @dev インデックス、またはwordPositionはtype(uint248).maxに制限される
     function nonceBitmap(address, uint256) external view returns (uint256);
 
     function permit(
@@ -44,21 +44,21 @@ interface IPermit2 {
         bytes calldata signature
     ) external;
 
-    /// @dev Uses cached version if chainid and address are unchanged from construction.
+    /// @dev chainidとアドレスがコンストラクションから変更されていない場合、キャッシュされたバージョンを使用
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 
     error SignatureExpired(uint256 signatureDeadline);
 
     error InvalidNonce();
-    /// @notice Thrown when the passed in signature is not a valid length
+    /// @notice 渡された署名が有効な長さでない場合にスロー
     error InvalidSignatureLength();
 
-    /// @notice Thrown when the recovered signer is equal to the zero address
+    /// @notice 復元された署名者がゼロアドレスと等しい場合にスロー
     error InvalidSignature();
 
-    /// @notice Thrown when the recovered signer does not equal the claimedSigner
+    /// @notice 復元された署名者がclaimedSignerと等しくない場合にスロー
     error InvalidSigner();
 
-    /// @notice Thrown when the recovered contract signature is incorrect
+    /// @notice 復元されたコントラクト署名が正しくない場合にスロー
     error InvalidContractSignature();
 }

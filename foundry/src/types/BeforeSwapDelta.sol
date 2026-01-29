@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.30;
 
-// Return type of the beforeSwap hook.
-// Upper 128 bits is the delta in specified tokens. Lower 128 bits is delta in unspecified tokens (to match the afterSwap hook)
+// beforeSwap hookの戻り値の型。
+// 上位128ビットは指定トークンのデルタ。下位128ビットは未指定トークンのデルタ（afterSwap hookと一致させるため）
 type BeforeSwapDelta is int256;
 
-// Creates a BeforeSwapDelta from specified and unspecified
+// specifiedとunspecifiedからBeforeSwapDeltaを作成
 function toBeforeSwapDelta(int128 deltaSpecified, int128 deltaUnspecified)
     pure
     returns (BeforeSwapDelta beforeSwapDelta)
@@ -16,13 +16,12 @@ function toBeforeSwapDelta(int128 deltaSpecified, int128 deltaUnspecified)
     }
 }
 
-/// @notice Library for getting the specified and unspecified deltas from the BeforeSwapDelta type
+/// @notice BeforeSwapDelta型から指定・未指定のデルタを取得するためのライブラリ
 library BeforeSwapDeltaLibrary {
-    /// @notice A BeforeSwapDelta of 0
+    /// @notice 0のBeforeSwapDelta
     BeforeSwapDelta public constant ZERO_DELTA = BeforeSwapDelta.wrap(0);
 
-    /// extracts int128 from the upper 128 bits of the BeforeSwapDelta
-    /// returned by beforeSwap
+    /// beforeSwapが返すBeforeSwapDeltaの上位128ビットからint128を抽出
     function getSpecifiedDelta(BeforeSwapDelta delta)
         internal
         pure
@@ -33,8 +32,7 @@ library BeforeSwapDeltaLibrary {
         }
     }
 
-    /// extracts int128 from the lower 128 bits of the BeforeSwapDelta
-    /// returned by beforeSwap and afterSwap
+    /// beforeSwapとafterSwapが返すBeforeSwapDeltaの下位128ビットからint128を抽出
     function getUnspecifiedDelta(BeforeSwapDelta delta)
         internal
         pure
