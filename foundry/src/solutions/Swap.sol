@@ -89,12 +89,14 @@ contract Swap is IUnlockCallback {
 
         require(amountOut >= params.amountOutMin, "amount out < min");
 
+        // 通貨の受け取り
         poolManager.take({
             currency: currencyOut,
             to: msgSender,
             amount: amountOut
         });
 
+        // 決済の準備
         poolManager.sync(currencyIn);
 
         if (currencyIn == address(0)) {

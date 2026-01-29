@@ -18,6 +18,12 @@ import {
     BeforeSwapDeltaLibrary
 } from "../types/BeforeSwapDelta.sol";
 
+/**
+ * Uniswapの処理の前後でCounterをインクリメントするフックコントラクト(サンプルコード)
+ * @title 
+ * @author 
+ * @notice 
+ */
 contract CounterHook {
     using PoolIdLibrary for PoolKey;
 
@@ -25,7 +31,7 @@ contract CounterHook {
     error HookNotImplemented();
 
     IPoolManager public immutable poolManager;
-
+    // カウンターのマッピング: PoolId => (フック名 => カウント)
     mapping(PoolId => mapping(string => uint256)) public counts;
 
     modifier onlyPoolManager() {
@@ -33,11 +39,20 @@ contract CounterHook {
         _;
     }
 
+    /**
+     * コンストラクター
+     * @param _poolManager プールマネージャーのアドレス
+     */
     constructor(address _poolManager) {
         poolManager = IPoolManager(_poolManager);
+        // このコントラクトに設定されているフック権限が正しいことを検証します
         Hooks.validateHookPermissions(address(this), getHookPermissions());
     }
 
+    /**
+     * フックの権限を取得します
+     * @return フックの権限
+     */
     function getHookPermissions()
         public
         pure
@@ -50,8 +65,8 @@ contract CounterHook {
             afterAddLiquidity: false,
             beforeRemoveLiquidity: true,
             afterRemoveLiquidity: false,
-            beforeSwap: true,
-            afterSwap: true,
+            beforeSwap: true,  // Swapの前にフックを有効化
+            afterSwap: true,   // Swapの後にフックを有効化
             beforeDonate: false,
             afterDonate: false,
             beforeSwapReturnDelta: false,
@@ -61,6 +76,12 @@ contract CounterHook {
         });
     }
 
+    /**
+     * beforeInitializeフック
+     * @param sender spender address
+     * @param key  プールキー
+     * @param sqrtPriceX96 初期価格の平方根（Q64.96形式）
+     */
     function beforeInitialize(
         address sender,
         PoolKey calldata key,
@@ -69,6 +90,13 @@ contract CounterHook {
         revert HookNotImplemented();
     }
 
+    /**
+     * afterInitializeフック
+     * @param sender spender address
+     * @param key  プールキー
+     * @param sqrtPriceX96 初期価格の平方根（Q64.96形式）
+     * @param tick 現在のティック
+     */
     function afterInitialize(
         address sender,
         PoolKey calldata key,
@@ -78,16 +106,27 @@ contract CounterHook {
         revert HookNotImplemented();
     }
 
+    /**
+     * Swapの前に呼び出されるフック
+     * @param sender spender address
+     * @param key  プールキー
+     * @param params パラメーター
+     * @param hookData フックデータ
+     */
     function beforeSwap(
         address sender,
         PoolKey calldata key,
         SwapParams calldata params,
         bytes calldata hookData
     ) external onlyPoolManager returns (bytes4, BeforeSwapDelta, uint24) {
+        // カウンターをインクリメント
         counts[key.toId()]["beforeSwap"]++;
         return (this.beforeSwap.selector, BeforeSwapDeltaLibrary.ZERO_DELTA, 0);
     }
 
+    /**
+     * Swapの後に呼び出されるフック
+     */
     function afterSwap(
         address sender,
         PoolKey calldata key,
@@ -95,20 +134,28 @@ contract CounterHook {
         BalanceDelta delta,
         bytes calldata hookData
     ) external onlyPoolManager returns (bytes4, int128) {
+        // カウンターをインクリメント
         counts[key.toId()]["afterSwap"]++;
         return (this.afterSwap.selector, 0);
     }
 
+    /**
+     * 流動性を提供する前に呼び出されるフック
+     */
     function beforeAddLiquidity(
         address sender,
         PoolKey calldata key,
         ModifyLiquidityParams calldata params,
         bytes calldata hookData
     ) external onlyPoolManager returns (bytes4) {
+        // カウンターをインクリメント
         counts[key.toId()]["beforeAddLiquidity"]++;
         return this.beforeAddLiquidity.selector;
     }
 
+    /**
+     * 流動性を提供した後に呼び出されるフック
+     */
     function afterAddLiquidity(
         address sender,
         PoolKey calldata key,
@@ -126,6 +173,7 @@ contract CounterHook {
         ModifyLiquidityParams calldata params,
         bytes calldata hookData
     ) external onlyPoolManager returns (bytes4) {
+        // カウンターをインクリメント
         counts[key.toId()]["beforeRemoveLiquidity"]++;
         return this.beforeRemoveLiquidity.selector;
     }
