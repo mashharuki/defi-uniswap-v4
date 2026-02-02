@@ -50,14 +50,18 @@ contract CounterHookTest is Test {
     uint256 constant REMOVE_LIQUIDITY = 3;
     uint256 action;
 
+    /**
+     * セットアップ関数
+     */
     function setUp() public {
         console.log("Deployer", address(this));
-
+        // SALTは環境変数から取得する
         bytes32 salt = vm.envBytes32("SALT");
         console.log("SALT");
         console.logBytes32(salt);
+        // CounterHookコントラクトのデプロイ
         hook = new CounterHook{salt: salt}(POOL_MANAGER);
-
+        // プールの初期化(ETH/USDC 0.05% fee)
         key = PoolKey({
             currency0: address(0),
             currency1: USDC,
@@ -65,20 +69,24 @@ contract CounterHookTest is Test {
             tickSpacing: TICK_SPACING,
             hooks: address(hook)
         });
-
+        // プールの初期価格を設定（1 ETH = 1,000,000 USDC）
         poolManager.initialize(key, 1e6 * (1 << 96));
-
+        // テスト用アカウントに初期資金を付与
         deal(USDC, address(this), 1e6 * 1e6);
         deal(address(this), 1e6 * 1e18);
     }
 
     receive() external payable {}
 
+    /**
+     * unlockCallback関数
+     */
     function unlockCallback(bytes calldata data)
         external
         returns (bytes memory)
     {
         if (action == ADD_LIQUIDITY) {
+            // プールマネージャーコントラクトからmodifyLiquidityを呼び出す(流動性の追加)
             (int256 d,) = poolManager.modifyLiquidity({
                 key: key,
                 params: ModifyLiquidityParams({
@@ -90,22 +98,27 @@ contract CounterHookTest is Test {
                 hookData: ""
             });
             BalanceDelta delta = BalanceDelta.wrap(d);
+
             if (delta.amount0() < 0) {
                 uint256 amount0 = uint128(-delta.amount0());
                 console.log("Add liquidity amount 0: %e", amount0);
+                // ETHの送金
                 poolManager.sync(key.currency0);
                 poolManager.settle{value: amount0}();
             }
             if (delta.amount1() < 0) {
                 uint256 amount1 = uint128(-delta.amount1());
                 console.log("Add liquidity amount 1: %e", amount1);
+                // USDCの送金
                 deal(USDC, address(this), amount1);
+                // USDCをプールマネージャーに送金
                 poolManager.sync(key.currency1);
                 usdc.transfer(address(poolManager), amount1);
                 poolManager.settle();
             }
             return "";
         } else if (action == REMOVE_LIQUIDITY) {
+            // プールマネージャーコントラクトからmodifyLiquidityを呼び出す(流動性の削除)
             (int256 d,) = poolManager.modifyLiquidity({
                 key: key,
                 params: ModifyLiquidityParams({
@@ -117,20 +130,24 @@ contract CounterHookTest is Test {
                 hookData: ""
             });
             BalanceDelta delta = BalanceDelta.wrap(d);
+            
             if (delta.amount0() > 0) {
                 uint256 amount0 = uint128(delta.amount0());
                 console.log("Remove liquidity amount 0: %e", amount0);
+                // ETHの受け取り
                 poolManager.take(key.currency0, address(this), amount0);
             }
             if (delta.amount1() > 0) {
                 uint256 amount1 = uint128(delta.amount1());
                 console.log("Remove liquidity amount 1: %e", amount1);
+                // USDCの受け取り
                 poolManager.take(key.currency1, address(this), amount1);
             }
             return "";
         } else if (action == SWAP) {
             // Swap ETH -> USDC
             uint256 bal = usdc.balanceOf(address(this));
+            // プールマネージャーコントラクトからswapを呼び出す(トークンの交換)
             int256 d = poolManager.swap({
                 key: key,
                 params: SwapParams({
@@ -157,12 +174,14 @@ contract CounterHookTest is Test {
                 amount1.toUint256()
             );
 
+
+            // ETHの支払い
             poolManager.take({
                 currency: currencyOut,
                 to: address(this),
                 amount: amountOut
             });
-
+            // USDCの送金
             poolManager.sync(currencyIn);
             poolManager.settle{value: amountIn}();
             return "";
@@ -171,10 +190,17 @@ contract CounterHookTest is Test {
         revert("Invalid action");
     }
 
+    /**
+     * 権限があるか確認するテスト
+     */
     function test_permissions() public {
         Hooks.validateHookPermissions(address(hook), hook.getHookPermissions());
     }
 
+    /**
+     * 流動性の追加・削除のテスト
+     * ※ それぞれのフックが正しく呼び出されているか確認
+     */
     function test_liquidity() public {
         action = ADD_LIQUIDITY;
         poolManager.unlock("");
@@ -187,6 +213,10 @@ contract CounterHookTest is Test {
         assertEq(hook.counts(key.toId(), "afterRemoveLiquidity"), 0);
     }
 
+    /**
+     * スワップのテスト
+     * ※ それぞれのフックが正しく呼び出されているか確認
+     */
     function test_swap() public {
         action = SWAP;
         deal(USDC, address(this), 100 * 1e6);

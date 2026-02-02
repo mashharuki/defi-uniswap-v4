@@ -146,3 +146,97 @@
 - [`LimitOrder`](https://github.com/Uniswap/v4-periphery/blob/example-contracts/contracts/hooks/examples/LimitOrder.sol)
 - [Permit2](https://github.com/dragonfly-xyz/useful-solidity-patterns/tree/main/patterns/permit2)
 - [UniversalRouterを使用したV3からV4へのスワップ方法](https://x.com/saucepoint/status/1950588162578817460)
+
+## 動かし方
+
+### インストール
+
+```bash
+git submodule update --init --recursive
+```
+
+以降のコマンドは`foundry`フォルダ配下で実行する
+
+### ビルド
+
+```bash
+forge build
+```
+
+### 事前準備
+
+- Alchemy等のRPCプロバイダーでEthereumメインネット用のAPIキーを発行すること
+- 上記値を環境変数にセットする。
+    ```bash
+    FORK_URL=
+    ```
+
+    そして環境変数有効化
+
+    ```bash
+    source .env
+    ```
+- 次に以下のコマンドで最新ブロック高を取得する
+    ```bash
+    FORK_BLOCK_NUM=$(cast block-number --rpc-url $FORK_URL)
+    echo $FORK_BLOCK_NUM
+    ```
+- 次に以下のコマンドでSaltを発行する
+    ```bash
+    forge test --match-path test/FindHookSalt.test.sol -vvv
+    ```
+
+    ここで得られたSALTを環境変数にセットする
+
+    ```bash
+    SALT=
+    ```
+
+    そして有効化
+
+    ```bash
+    source .env
+    ```
+
+### テスト
+
+```bash
+forge test
+```
+
+以下のように1機能ずつテストしていく
+
+#### CounterHook
+
+```bash
+forge test --fork-url $FORK_URL --fork-block-number $FORK_BLOCK_NUM --match-path test/CounterHook.test.sol -vvv
+# 回答の方を実行する場合は FOUNDRY_PROFILE=solutionをつける
+FOUNDRY_PROFILE=solution forge test --fork-url $FORK_URL --fork-block-number $FORK_BLOCK_NUM --match-path test/CounterHook.test.sol -vvv
+```
+
+テスト実行結果例
+
+```bash
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 44.85s (42.33s CPU time)
+
+Ran 1 test suite in 50.55s (44.85s CPU time): 3 tests passed, 0 failed, 0 skipped (3 total tests)
+```
+
+#### フラッシュローン
+
+```bash
+forge test --fork-url $FORK_URL --fork-block-number $FORK_BLOCK_NUM --match-path test/Flash.test.sol -vvv
+```
+
+```bash
+Logs:
+  Borrowed amount: 1e9 USDC
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 1.10s (101.25ms CPU time)
+```
+
+#### LimitOrder(コンパイルエラーが起きてテストが通らない)
+
+```bash
+forge test --fork-url $FORK_URL --fork-block-number $FORK_BLOCK_NUM --match-path test/LimitOrder.test.sol -vvv
+```

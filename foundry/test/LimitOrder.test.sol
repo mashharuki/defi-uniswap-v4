@@ -57,6 +57,9 @@ contract LimitOrderTest is Test, TestUtil {
 
     address[2] users = [address(11), address(22)];
 
+    /**
+     * セットアップメソッド
+     */
     function setUp() public {
         helper = new TestHelper();
 
@@ -65,8 +68,10 @@ contract LimitOrderTest is Test, TestUtil {
         bytes32 salt = vm.envBytes32("SALT");
         // console.log("SALT");
         // console.logBytes32(salt);
+        
+        // LimitOrderコントラクトのデプロイ(hookコントラクト)
         hook = new LimitOrder{salt: salt}(POOL_MANAGER);
-
+        // プールキーの設定
         key = PoolKey({
             currency0: address(0),
             currency1: USDC,
@@ -77,6 +82,7 @@ contract LimitOrderTest is Test, TestUtil {
 
         // sqrt(token 1 / token 0) x 2**96 = 1 ETH = 3000 USDC
         uint160 sqrtPriceX96 = 4347826086925359274971250;
+        // プールキーを指定して初期化
         poolManager.initialize(key, sqrtPriceX96);
 
         // Check tick is stored
@@ -87,20 +93,26 @@ contract LimitOrderTest is Test, TestUtil {
         poolManager.unlock("");
 
         for (uint256 i = 0; i < users.length; i++) {
+            // ETHとUSDCを各ユーザーに付与
             deal(users[i], 100 * 1e18);
             deal(USDC, users[i], 1e6 * 1e6);
             vm.prank(users[i]);
+            // Approve max USDC to hook contract
             usdc.approve(address(hook), type(uint256).max);
         }
     }
 
     receive() external payable {}
 
+    /**
+     * unlockされた時に呼び出されるコールバックメソッド
+     */
     function unlockCallback(bytes calldata data)
         external
         returns (bytes memory)
     {
         if (action == ADD_LIQUIDITY) {
+            // プールマネージャーコントラクトからmodifyLiquidityを呼び出す(流動性の追加)
             (int256 d,) = poolManager.modifyLiquidity({
                 key: key,
                 params: ModifyLiquidityParams({
@@ -111,19 +123,26 @@ contract LimitOrderTest is Test, TestUtil {
                 }),
                 hookData: ""
             });
+            // BalaceDelta型のデータを取得する
             BalanceDelta delta = BalanceDelta.wrap(d);
+            // 借り入れと返済の処理
             if (delta.amount0() < 0) {
                 uint256 amount0 = uint128(-delta.amount0());
                 console.log("Add liquidity amount 0: %e", amount0);
+                // ETHの送金
                 deal(address(this), amount0);
+                // 同期
                 poolManager.sync(key.currency0);
+                // 送金
                 poolManager.settle{value: amount0}();
             }
             if (delta.amount1() < 0) {
                 uint256 amount1 = uint128(-delta.amount1());
                 console.log("Add liquidity amount 1: %e", amount1);
+                // USDCの送金
                 deal(USDC, address(this), amount1);
                 poolManager.sync(key.currency1);
+                // 送金
                 usdc.transfer(address(poolManager), amount1);
                 poolManager.settle();
             }
@@ -196,6 +215,9 @@ contract LimitOrderTest is Test, TestUtil {
         revert("Invalid action");
     }
 
+    /**
+     * Limit Orderの設置をテストするコード
+     */
     function test_place() public {
         // vm.skip(true);
 
@@ -246,8 +268,11 @@ contract LimitOrderTest is Test, TestUtil {
         assertEq(amount1, 0, "amount1");
         assertEq(bucketLiq, userLiq, "bucket liquidity");
         assertEq(size, userLiq, "order size");
-    }
+    }   
 
+    /**
+     * Limit Orderの実行をテストするコード
+     */
     function test_take() public {
         // vm.skip(true);
 
@@ -301,6 +326,9 @@ contract LimitOrderTest is Test, TestUtil {
         hook.take(key, lower, zeroForOne, 0);
     }
 
+    /**
+     * Limit Orderのキャンセルをテストするコード
+     */
     function test_cancel() public {
         // vm.skip(true);
 
@@ -346,9 +374,13 @@ contract LimitOrderTest is Test, TestUtil {
         // Test cannot cancel twice
         vm.expectRevert();
         vm.prank(users[0]);
+        // キャンセルするとリバートすることを確認
         hook.cancel(key, lower, zeroForOne);
     }
 
+    /**
+     * Limit Orderのキャンセルが、バケットが満杯の場合にリバートすることをテストするコード
+     */
     function test_cancel_revert_if_filled() public {
         // vm.skip(true);
 
@@ -364,12 +396,13 @@ contract LimitOrderTest is Test, TestUtil {
         // Test cannot cancel if bucket is filled
         action = SWAP;
         poolManager.unlock(abi.encode(uint256(12 * 1e18), !zeroForOne));
-
+        // Check tick moved past lower
         int24 tickAfter = getTick(key.toId());
         console.log("tick after:", tickAfter);
         assertLt(tickAfter, lower);
-
+        // get bucket info
         bytes32 id = hook.getBucketId(key.toId(), lower, zeroForOne);
+        // Check bucket is filled
         (bool filled, uint256 amount0, uint256 amount1, uint256 liquidity) =
             hook.getBucket(id, 0);
         console.log("amount0: %e", amount0);
@@ -380,6 +413,7 @@ contract LimitOrderTest is Test, TestUtil {
 
         vm.expectRevert();
         vm.prank(users[0]);
+        // キャンセルするとリバートすることを確認
         hook.cancel(key, lower, zeroForOne);
     }
 }

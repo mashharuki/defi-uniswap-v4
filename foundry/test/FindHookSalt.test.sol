@@ -15,6 +15,9 @@ NOTE: Don't run in fork mode, the test may hit the RPC rate limit and return an 
 forge test --match-path test/FindHookSalt.test.sol -vvv
 */
 contract FindHookSalt is Test {
+    /**
+     * アドレスとsaltを見つけるメソッド
+     */
     function find(
         address deployer,
         bytes memory code,
@@ -36,6 +39,9 @@ contract FindHookSalt is Test {
         return (addr, salt);
     }
 
+    /**
+     * CounterHookのアドレスとsaltを見つけるテスト
+     */
     function test_counter_hook() public {
         (address addr, bytes32 salt) = find(
             address(this),
